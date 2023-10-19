@@ -8,6 +8,6 @@ namespace BusinessLayer
 {
 	public class Location
 	{
-
+		public Coordinates Coordinates { get; set; }
 	}
 }
