@@ -29,13 +29,13 @@ namespace BusinessLayer
         [ForeignKey("LocationId")]
         public int LocationId { get; set; }
 
-        //Add List<TrainCar>
+        public List<TrainCar> TrainCars { get; set; }
 
         public TrainType TrainType { get; set; }
 
         public TrainComposition()
         {
-            
+            TrainCars = new List<TrainCar>();
         }
 
 		public TrainComposition(Locomotive locomotiveA, Locomotive locomotiveB, Location location)
@@ -43,6 +43,7 @@ namespace BusinessLayer
 			LocomotiveA = locomotiveA;
 			LocomotiveB = locomotiveB;
 			Location = location;
-		}
+            TrainCars = new List<TrainCar>();
+        }
 	}
 }
