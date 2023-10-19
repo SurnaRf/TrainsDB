@@ -32,10 +32,11 @@ namespace BusinessLayer
         [ForeignKey("TrainComposition")]
         public int TrainCompositionId { get; set; }
 
-        public TrainCar(TrainComposition trainComposition, Location location, double? weight = 0)
+        public TrainCar(int trainCompositionTd, Location location, double? weight = 0)
         {
             TrainComposition = trainComposition;
             Location = location;
+            TrainCarType = trainCarType; 
             Weight = weight;
         }
 

@@ -29,11 +29,12 @@ namespace BusinessLayer
             
         }
 
-		public Locomotive(string nickname, TrainComposition trainComposition, Location location)
+		public Locomotive(string nickname, Location location, LocomotiveType locomotiveType, TrainComposition trainComposition = null)
 		{
-			Nickname = nickname;
-			TrainComposition = trainComposition;
+			Nickname = nickname;			
 			Location = location;
+            LocomotiveType = locomotiveType; 
+            TrainComposition = trainComposition;
 		}
 	}
 }
