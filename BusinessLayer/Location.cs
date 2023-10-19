@@ -9,37 +9,36 @@ namespace BusinessLayer
 {
 	public class Location
 	{
-
         [Key]
 		public int Id { get; set; }
 
 		[Required]
-		public string? Name { get; set; }
+		public string Name { get; set; }
 
 		public Coordinates Coordinates { get; set; }
 
-		public List<TrainComposition> TrainCompositions { get; set; }
+        #region Navigation
+
+        public List<TrainComposition> TrainCompositions { get; set; }
 
 		public List<Locomotive> Locomotives { get; set; }
 
 		public List<TrainCar> TrainCars { get; set; }
 
+        #endregion
+
         public Location() 
         {
-            TrainCompositions = new List<TrainComposition>();
-            Locomotives = new List<Locomotive>();
-            TrainCars = new List<TrainCar>();
+            TrainCompositions = new();
+            Locomotives = new();
+            TrainCars = new();
         }
 
-        public Location(string? name, Coordinates coordinates)
+        public Location(string name, Coordinates coordinates)
+            : this()
         {
             Name = name;
             Coordinates = coordinates;
-            TrainCompositions = new List<TrainComposition>();
-            Locomotives = new List<Locomotive>();
-            TrainCars = new List<TrainCar>();
         }
-
-
     }
 }

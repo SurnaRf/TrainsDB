@@ -12,9 +12,19 @@ namespace BusinessLayer
 	{
         [Key]
         public int Id { get; set; }
+        
+        public TrainType TrainType { get; set; }
+
+        #region Navigation
+
+        [Required]
+		public Location Location { get; set; }
+
+        [ForeignKey("LocationId")]
+        public int LocationId { get; set; }
 
         public Locomotive LocomotiveA { get; set; }
-
+        
         [ForeignKey("LocomotiveA")]
         public int LocomotiveAId { get; set; }
 
@@ -23,28 +33,26 @@ namespace BusinessLayer
 		[ForeignKey("LocomotiveB")]
 		public int LocomotiveBId { get; set; }
 
-        [Required]
-		public Location Location { get; set; }
-
-        [ForeignKey("LocationId")]
-        public int LocationId { get; set; }
-
         public List<TrainCar> TrainCars { get; set; }
 
-        public TrainType TrainType { get; set; }
+        #endregion
 
         public TrainComposition()
         {
-            TrainCars = new List<TrainCar>();
+            TrainCars = new();
         }
 
-		public TrainComposition( Location location, TrainType trainType, Locomotive locomotiveA = null, Locomotive locomotiveB = null)
+        public TrainComposition(
+            TrainType trainType,
+            Location location,
+            Locomotive locomotiveA = null,
+            Locomotive locomotiveB = null)
+            : this()
 		{
-            Location = location;
             TrainType = trainType;
+            Location = location;
 			LocomotiveA = locomotiveA;
-			LocomotiveB = locomotiveB;			
-            TrainCars = new List<TrainCar>();
+            LocomotiveB = locomotiveB;
         }
 	}
 }

@@ -15,11 +15,9 @@ namespace BusinessLayer
         [Required]
         public string LastName { get; set; }
 
-        public User()
-        {
-            
-        }
-		public User(string firstName, string lastName)
+        public User() { }
+		
+        public User(string firstName, string lastName)
 		{
 			FirstName = firstName;
 			LastName = lastName;

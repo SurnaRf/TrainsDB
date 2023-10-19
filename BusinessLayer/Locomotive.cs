@@ -8,32 +8,38 @@ namespace BusinessLayer
         [Key]
         public int Id { get; set; }
 
+        [Required]
         [MaxLength(15, ErrorMessage = "Name cannot be longer than 15 symbols!")]
         public string Nickname { get; set; }
+        
+        public LocomotiveType LocomotiveType { get; set; }
 
-        public TrainComposition TrainComposition { get; set; }
-
-        [ForeignKey("TrainComposition")]
-        public int TrainCompositionId { get; set; }
+        #region Navigation
 
         [Required]
         public Location Location { get; set; }
 
         [ForeignKey("Location")]
         public int LocationId { get; set; }
+        
+        public TrainComposition TrainComposition { get; set; }
 
-        public LocomotiveType LocomotiveType { get; set; }
+        [ForeignKey("TrainComposition")]
+        public int TrainCompositionId { get; set; }
 
-        public Locomotive()
-        {
-            
-        }
+        #endregion
 
-		public Locomotive(string nickname, Location location, LocomotiveType locomotiveType, TrainComposition trainComposition = null)
+        public Locomotive() { }
+
+		public Locomotive(
+            string nickname,
+            LocomotiveType locomotiveType,
+            Location location,
+            TrainComposition trainComposition = null)
 		{
 			Nickname = nickname;			
-			Location = location;
             LocomotiveType = locomotiveType; 
+			Location = location;
             TrainComposition = trainComposition;
 		}
 	}

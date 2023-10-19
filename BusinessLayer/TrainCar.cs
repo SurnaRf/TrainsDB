@@ -10,7 +10,6 @@ namespace BusinessLayer
 {
     public class TrainCar
     {
-
         [Key]
         public int Id { get; set; }
 
@@ -18,6 +17,8 @@ namespace BusinessLayer
 
         //requirements at later date
         public double? Weight { get; set; }
+
+        #region Navigation
 
         [Required]
         public Location Location { get; set; }
@@ -28,18 +29,23 @@ namespace BusinessLayer
         [Required]
         public TrainComposition TrainComposition { get; set; }
 
-
         [ForeignKey("TrainComposition")]
         public int TrainCompositionId { get; set; }
 
-        public TrainCar(int trainCompositionTd, Location location, double? weight = 0)
-        {
-            TrainComposition = trainComposition;
-            Location = location;
-            TrainCarType = trainCarType; 
-            Weight = weight;
-        }
+        #endregion
 
         public TrainCar() { }
+        
+        public TrainCar(
+            TrainCarType trainCarType,
+            Location location,
+            double? weight = 0,
+            TrainComposition trainComposition = null)
+        {
+            TrainCarType = trainCarType; 
+            Location = location;
+            Weight = weight;
+            TrainComposition = trainComposition;
+        }
     }
 }

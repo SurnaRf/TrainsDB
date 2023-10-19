@@ -34,7 +34,7 @@ namespace BusinessLayer
 
         public static Coordinates FromBytes(byte[] bytes)
         {
-            using MemoryStream stream = new MemoryStream(bytes);
+            using MemoryStream stream = new(bytes);
             using BinaryReader reader = new(stream);
             double X = reader.ReadDouble();
             double Y = reader.ReadDouble();
