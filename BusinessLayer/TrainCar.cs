@@ -22,12 +22,19 @@ namespace BusinessLayer
         [Required]
         public Location Location { get; set; }
 
-        [ForeignKey("TrainComposition")]
-        public int TrainCompositionTd { get; set; }
+        [ForeignKey("Location")]
+        public int LocationId { get; set; }
 
-        public TrainCar(int trainCompositionTd, Location location, double? weight = 0)
+        [Required]
+        public TrainComposition TrainComposition { get; set; }
+
+
+        [ForeignKey("TrainComposition")]
+        public int TrainCompositionId { get; set; }
+
+        public TrainCar(TrainComposition trainComposition, Location location, double? weight = 0)
         {
-            TrainCompositionTd = trainCompositionTd;
+            TrainComposition = trainComposition;
             Location = location;
             Weight = weight;
         }
