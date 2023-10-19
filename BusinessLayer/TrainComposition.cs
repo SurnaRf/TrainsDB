@@ -38,11 +38,12 @@ namespace BusinessLayer
             TrainCars = new List<TrainCar>();
         }
 
-		public TrainComposition(Locomotive locomotiveA, Locomotive locomotiveB, Location location)
+		public TrainComposition( Location location, TrainType trainType, Locomotive locomotiveA = null, Locomotive locomotiveB = null)
 		{
+            Location = location;
+            TrainType = trainType;
 			LocomotiveA = locomotiveA;
-			LocomotiveB = locomotiveB;
-			Location = location;
+			LocomotiveB = locomotiveB;			
             TrainCars = new List<TrainCar>();
         }
 	}
