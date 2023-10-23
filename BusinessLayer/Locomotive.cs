@@ -12,6 +12,8 @@ namespace BusinessLayer
         [MaxLength(15, ErrorMessage = "Name cannot be longer than 15 symbols!")]
         public string Nickname { get; set; }
         
+        public double CarryingCapacity { get; set; }
+
         public LocomotiveType LocomotiveType { get; set; }
 
         #region Navigation
@@ -33,14 +35,21 @@ namespace BusinessLayer
 
 		public Locomotive(
             string nickname,
+            double carryingCapacity,
             LocomotiveType locomotiveType,
             Location location,
             TrainComposition trainComposition = null)
 		{
-			Nickname = nickname;			
+            Nickname = nickname;
+            CarryingCapacity = carryingCapacity;
             LocomotiveType = locomotiveType; 
 			Location = location;
             TrainComposition = trainComposition;
 		}
-	}
+
+        public bool CanCarryComposition(TrainComposition trainComposition)
+        {
+            return trainComposition.TotalWeight() <= CarryingCapacity;
+        }
+    }
 }

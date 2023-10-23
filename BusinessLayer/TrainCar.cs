@@ -15,8 +15,7 @@ namespace BusinessLayer
 
         public TrainCarType TrainCarType { get; set; }
 
-        //requirements at later date
-        public double? Weight { get; set; }
+        public double Weight { get; set; }
 
         #region Navigation
 
@@ -38,11 +37,11 @@ namespace BusinessLayer
         
         public TrainCar(
             TrainCarType trainCarType,
+            double weight,
             Location location,
-            double? weight = 0,
             TrainComposition trainComposition = null)
         {
-            TrainCarType = trainCarType; 
+            TrainCarType = trainCarType;
             Location = location;
             Weight = weight;
             TrainComposition = trainComposition;

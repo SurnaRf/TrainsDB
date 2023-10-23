@@ -54,5 +54,15 @@ namespace BusinessLayer
 			LocomotiveA = locomotiveA;
             LocomotiveB = locomotiveB;
         }
+
+        public double TotalWeight()
+        {
+            double total = 0;
+            foreach (TrainCar trainCar in TrainCars)
+            {
+                total += trainCar.Weight;
+            }
+            return total;
+        }
 	}
 }
