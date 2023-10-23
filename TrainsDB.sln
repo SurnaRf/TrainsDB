@@ -5,7 +5,9 @@ VisualStudioVersion = 17.5.33414.496
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{59434155-7B28-4FFF-A1D3-791D73CF78E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pathfinding", "Pathfinding\Pathfinding.csproj", "{D68D6C81-C899-41C2-A257-1B6CACA2047E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Pathfinding", "Pathfinding\Pathfinding.csproj", "{D68D6C81-C899-41C2-A257-1B6CACA2047E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLayer", "DataLayer\DataLayer.csproj", "{82C240BB-6138-4935-9082-164C793C54B5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{D68D6C81-C899-41C2-A257-1B6CACA2047E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D68D6C81-C899-41C2-A257-1B6CACA2047E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D68D6C81-C899-41C2-A257-1B6CACA2047E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{82C240BB-6138-4935-9082-164C793C54B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82C240BB-6138-4935-9082-164C793C54B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82C240BB-6138-4935-9082-164C793C54B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82C240BB-6138-4935-9082-164C793C54B5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
