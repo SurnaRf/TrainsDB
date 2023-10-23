@@ -31,6 +31,10 @@ namespace DataLayer
             modelBuilder.Entity<Locomotive>().Property(l => l.LocomotiveType).HasConversion<string>();
             modelBuilder.Entity<TrainCar>().Property(l => l.TrainCarType).HasConversion<string>();
             modelBuilder.Entity<TrainComposition>().Property(l => l.TrainType).HasConversion<string>();
+            
+            modelBuilder.Entity<Connection>().Property(c => c.Primary).HasConversion<string>();
+            modelBuilder.Entity<Connection>().Property(c => c.Secondary).HasConversion<string>();
+            
             modelBuilder.Entity<Location>().Property(c => c.Coordinates).HasConversion(new CoordinatesConvertor());
 
             base.OnModelCreating(modelBuilder);
