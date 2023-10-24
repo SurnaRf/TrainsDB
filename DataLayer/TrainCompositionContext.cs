@@ -23,7 +23,7 @@ namespace DataLayer
 			{
 				Location locationFromDb = await dbContext.Locations.FindAsync(item.LocationId);
 
-				if (locationFromDb == null)
+				if (locationFromDb != null)
 				{
 					item.Location = locationFromDb;
 				}
