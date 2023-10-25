@@ -17,10 +17,7 @@ namespace BusinessLayer
         public Location NodeB => LocationB;
 
         [Required]
-        public TerrainType Primary { get; set; }
-
-        [Required]
-        public TerrainType Secondary { get; set; }
+        public TerrainType TerrainType { get; set; }
 
         #region Navigation
 
@@ -43,7 +40,7 @@ namespace BusinessLayer
             get
             {
                 return NodeA.Coordinates.Distance(NodeB.Coordinates)
-                    * TerrainTypeValueConverter.TerrainModifier(Primary, Secondary);
+                    * TerrainTypeValueConverter.TotalModifier(TerrainType);
             }
         }
 
@@ -53,13 +50,11 @@ namespace BusinessLayer
         }
 
         public Connection(
-            TerrainType primary,
-            TerrainType secondary,
+            TerrainType terrainType,
             Location locationA,
             Location locationB)
         {
-            Primary = primary;
-            Secondary = secondary;
+            TerrainType = terrainType;
             LocationA = locationA;
             LocationB = locationB;
         }
