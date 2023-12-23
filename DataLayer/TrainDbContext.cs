@@ -28,12 +28,33 @@ namespace DataLayer
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Locomotive>().Property(l => l.LocomotiveType).HasConversion<string>();
-            modelBuilder.Entity<TrainCar>().Property(l => l.TrainCarType).HasConversion<string>();
-            modelBuilder.Entity<TrainComposition>().Property(l => l.TrainType).HasConversion<string>();
-            modelBuilder.Entity<Connection>().Property(c => c.TerrainType).HasConversion<string>();
-            
-            modelBuilder.Entity<Location>().Property(c => c.Coordinates).HasConversion(new CoordinatesConvertor());
+            modelBuilder.Entity<Locomotive>()
+                .Property(l => l.LocomotiveType)
+                .HasConversion<string>();
+            modelBuilder.Entity<TrainCar>()
+                .Property(tc => tc.TrainCarType)
+                .HasConversion<string>();
+            modelBuilder.Entity<TrainComposition>()
+                .Property(trcn => trcn.TrainType)
+                .HasConversion<string>();
+            modelBuilder.Entity<Connection>()
+                .Property(c => c.TerrainType)
+                .HasConversion<string>();
+
+            modelBuilder.Entity<Location>()
+                .Property(c => c.Coordinates)
+                .HasConversion(new CoordinatesConvertor());
+
+            modelBuilder.Entity<Connection>()
+                .HasOne(c => c.NodeA)
+                .WithMany(l => (IEnumerable<Connection>)l.ConnectionsA)
+                .HasForeignKey(c => c.NodeAId)
+                .OnDelete(DeleteBehavior.Cascade);
+            modelBuilder.Entity<Connection>()
+                .HasOne(c => c.NodeB)
+                .WithMany(l => (IEnumerable<Connection>)l.ConnectionsB)
+                .HasForeignKey(c => c.NodeBId)
+                .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(modelBuilder);
         }

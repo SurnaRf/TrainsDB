@@ -15,11 +15,11 @@ namespace DataLayer
         {
             try
             {
-                Location locationA = await dbContext.Locations.FindAsync(item.LocationAId);
-                if(locationA != null) item.LocationA = locationA;
+                Location locationA = await dbContext.Locations.FindAsync(item.NodeAId);
+                if(locationA != null) item.NodeA = locationA;
 
-                Location locationB = dbContext.Locations.Find(item.LocationBId);
-                if (locationB != null) item.LocationB = locationB;
+                Location locationB = dbContext.Locations.Find(item.NodeBId);
+                if (locationB != null) item.NodeB = locationB;
 
                 dbContext.Connections.Add(item);
                 await dbContext.SaveChangesAsync();
@@ -35,8 +35,8 @@ namespace DataLayer
 
                 if (useNavigationalProperties)
                 {
-                    query = query.Include(p => p.LocationA)
-                                .Include(p => p.LocationB);
+                    query = query.Include(p => p.NodeA)
+                                .Include(p => p.NodeB);
                 }
 
                 if (isReadOnly)
@@ -57,8 +57,8 @@ namespace DataLayer
 
                 if (useNavigationalProperties)
                 {
-                    query = query.Include(p => p.LocationA)
-                                .Include(p => p.LocationB);
+                    query = query.Include(p => p.NodeA)
+                                .Include(p => p.NodeB);
                 }
 
                 if (isReadOnly)
@@ -91,11 +91,11 @@ namespace DataLayer
                     return;
                 }
                 
-                Location locationA = await dbContext.Locations.FindAsync(item.LocationAId);
-                if (locationA != null) connectionFromDb.LocationA = locationA;
+                Location locationA = await dbContext.Locations.FindAsync(item.NodeAId);
+                if (locationA != null) connectionFromDb.NodeA = locationA;
 
-                Location locationB = await dbContext.Locations.FindAsync(item.LocationBId);
-                if (locationB != null) connectionFromDb.LocationB = locationB;
+                Location locationB = await dbContext.Locations.FindAsync(item.NodeBId);
+                if (locationB != null) connectionFromDb.NodeB = locationB;
 
                 await dbContext.SaveChangesAsync();
             }
@@ -106,8 +106,8 @@ namespace DataLayer
         {
             try
             {
-                Connection connectionFromDb = await ReadAsync(key)
-                    ?? throw new ArgumentException("Connection with the given key does not exist!");
+                Connection connectionFromDb = await ReadAsync(key, false, false)
+                    ?? throw new InvalidOperationException("Connection with the given key does not exist!");
 
                 dbContext.Connections.Remove(connectionFromDb);
 

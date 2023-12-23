@@ -19,6 +19,9 @@ namespace BusinessLayer
 
         #region Navigation
 
+        public List<Connection> ConnectionsA { get; set; }
+        public List<Connection> ConnectionsB { get; set; }
+
         public List<TrainComposition> TrainCompositions { get; set; }
 
 		public List<Locomotive> Locomotives { get; set; }
@@ -29,6 +32,8 @@ namespace BusinessLayer
 
         public Location() 
         {
+            ConnectionsA = new();
+            ConnectionsB = new();
             TrainCompositions = new();
             Locomotives = new();
             TrainCars = new();

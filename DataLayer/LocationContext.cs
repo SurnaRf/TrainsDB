@@ -69,7 +69,7 @@ namespace DataLayer
                     query = query.AsNoTrackingWithIdentityResolution();
                 }
 
-                return await query.FirstOrDefaultAsync(x=>x.Id == key);
+                return await query.FirstOrDefaultAsync(x => x.Id == key);
             }
             catch (Exception) { throw; }
         }
@@ -97,12 +97,11 @@ namespace DataLayer
         {
             try
             {
-                Location locationFromDb = await ReadAsync(key);
-                if (locationFromDb != null)
-                {
-                    dbContext.Locations.Remove(locationFromDb);
-                    await dbContext.SaveChangesAsync();
-                }
+                Location locationFromDb = await ReadAsync(key, false, false)
+                    ?? throw new InvalidOperationException("Location with the given key does not exist!");
+                
+                dbContext.Locations.Remove(locationFromDb);
+                await dbContext.SaveChangesAsync();
             }
             catch (Exception) { throw; }
         }

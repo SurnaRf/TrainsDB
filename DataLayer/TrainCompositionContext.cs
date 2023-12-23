@@ -44,8 +44,7 @@ namespace DataLayer
 				if (useNavigationalProperties)
 				{
 					query = query.Include(trnc => trnc.Location)
-						.Include(trnc => trnc.LocomotiveA)
-						.Include(trnc => trnc.LocomotiveB)
+						.Include(trnc => trnc.Locomotives)
 						.Include(trnc => trnc.TrainCars);
 				}
 
@@ -68,8 +67,7 @@ namespace DataLayer
 				if (useNavigationalProperties)
 				{
 					query = query.Include(trnc => trnc.Location)
-						.Include(trnc => trnc.LocomotiveA)
-						.Include(trnc => trnc.LocomotiveB)
+						.Include(trnc => trnc.Locomotives)
 						.Include(trnc => trnc.TrainCars);
 				}
 
@@ -110,27 +108,23 @@ namespace DataLayer
 						trainCompositionFromDb.Location = item.Location;
 					}
 
-					Locomotive locomotiveA = await dbContext.Locomotives.FindAsync(item.LocomotiveAId);
+					List<Locomotive> locomotives = new();
 
-					if(locomotiveA != null)
+					foreach(Locomotive locomotive in item.Locomotives)
 					{
-						trainCompositionFromDb.LocomotiveA = locomotiveA;
-					}
-					else
-					{
-						trainCompositionFromDb.LocomotiveA = item.LocomotiveA;
+						Locomotive locomotiveFromDb = await dbContext.Locomotives.FindAsync(locomotive.Id);
+
+						if(locomotiveFromDb != null)
+						{
+							locomotives.Add(locomotiveFromDb);
+						}
+						else
+						{
+							locomotives.Add(locomotive);
+						}
 					}
 
-					Locomotive locomotiveB = await dbContext.Locomotives.FindAsync(item.LocomotiveBId);
-
-					if (locomotiveB != null)
-					{
-						trainCompositionFromDb.LocomotiveB = locomotiveB;
-					}
-					else
-					{
-						trainCompositionFromDb.LocomotiveB = item.LocomotiveB;
-					}
+					trainCompositionFromDb.Locomotives = locomotives;
 
 					List<TrainCar> trainCars = new();
 
@@ -160,11 +154,11 @@ namespace DataLayer
 		{
 			try
 			{
-				TrainComposition trainCompositionFromDb = await ReadAsync(key);
+				TrainComposition trainCompositionFromDb = await ReadAsync(key, false, false);
 
 				if (trainCompositionFromDb == null)
 				{
-					throw new ArgumentException("Train composition with the given key does not exist!");
+					throw new InvalidOperationException("Train composition with the given key does not exist!");
 				}
 
 				dbContext.TrainCompositions.Remove(trainCompositionFromDb);

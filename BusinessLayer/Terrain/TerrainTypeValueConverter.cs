@@ -22,7 +22,7 @@ namespace BusinessLayer.Terrain
                 count++;
             }
 
-            return totalValue / count;
+            return totalValue / Math.Max(count-1, 1);
         }
 
         public static double SpecificModifier(TerrainType terrainType)

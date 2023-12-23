@@ -125,8 +125,8 @@ namespace DataLayer
 		{
 			try
 			{
-				Locomotive locomotiveFromDb = await ReadAsync(key)
-					?? throw new ArgumentException("Locomotive with the given key does not exist!");
+				Locomotive locomotiveFromDb = await ReadAsync(key, false, false)
+					?? throw new InvalidOperationException("Locomotive with the given key does not exist!");
 
                 dbContext.Locomotives.Remove(locomotiveFromDb);
 				await dbContext.SaveChangesAsync();

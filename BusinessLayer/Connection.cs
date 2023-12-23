@@ -10,28 +10,22 @@ namespace BusinessLayer
         [Key]
         public int Id { get; set; }
 
-        [NotMapped]
-        public Location NodeA => LocationA;
-
-        [NotMapped]
-        public Location NodeB => LocationB;
-
         [Required]
         public TerrainType TerrainType { get; set; }
 
         #region Navigation
 
         [Required]
-        public Location LocationA { get; set; }
+        public Location NodeA { get; set; }
 
-        [ForeignKey("LocationA")]
-        public int LocationAId { get; set; }
+        [ForeignKey("NodeA")]
+        public int NodeAId { get; set; }
 
         [Required]
-        public Location LocationB { get; set; }
+        public Location NodeB { get; set; }
         
-        [ForeignKey("LocationB")]
-        public int LocationBId { get; set; }
+        [ForeignKey("NodeB")]
+        public int NodeBId { get; set; }
 
         #endregion
 
@@ -55,8 +49,8 @@ namespace BusinessLayer
             Location locationB)
         {
             TerrainType = terrainType;
-            LocationA = locationA;
-            LocationB = locationB;
+            NodeA = locationA;
+            NodeB = locationB;
         }
     }
 }
