@@ -1,6 +1,5 @@
 ﻿using BusinessLayer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +16,7 @@ namespace DataLayer
         {
             this.dbContext = dbContext;
         }
+
         public async Task CreateAsync(Locomotive item)
 		{
 			try
@@ -31,11 +31,7 @@ namespace DataLayer
 				dbContext.Locomotives.Add(item);
 				await dbContext.SaveChangesAsync();
 			}
-			catch (Exception)
-			{
-
-				throw;
-			}
+			catch (Exception) { throw; }
 		}
 
 		public async Task<Locomotive> ReadAsync(int key, bool useNavigationalProperties = false, bool isReadOnly = true)
@@ -56,12 +52,8 @@ namespace DataLayer
 
 				return await query.FirstOrDefaultAsync(l => l.Id == key);
 			}
-			catch (Exception)
-			{
-
-				throw;
-			}
-		}
+            catch (Exception) { throw; }
+        }
 
 		public async Task<ICollection<Locomotive>> ReadAllAsync(bool useNavigationalProperties = false, bool isReadOnly = true)
 		{
@@ -81,12 +73,8 @@ namespace DataLayer
 
 				return await query.ToListAsync();
 			}
-			catch (Exception)
-			{
-
-				throw;
-			}
-		}
+            catch (Exception) { throw; }
+        }
 
 		public async Task UpdateAsync(Locomotive item, bool useNavigationalProperties = false)
 		{
@@ -96,7 +84,7 @@ namespace DataLayer
 
 				if (locomotiveFromDb == null)
 				{
-					CreateAsync(item);
+					await CreateAsync(item);
 					return;
 				}
 
@@ -116,10 +104,9 @@ namespace DataLayer
 					}
 
 					TrainComposition trainCompositionFromDb = await dbContext
-						.TrainCompositions
-						.FindAsync(item.TrainCompositionId);
+						.TrainCompositions.FindAsync(item.TrainCompositionId);
 
-					if (locationFromDb != null)
+					if (trainCompositionFromDb != null)
 					{
 						locomotiveFromDb.TrainComposition = trainCompositionFromDb;
 					}
@@ -131,33 +118,20 @@ namespace DataLayer
 
 				await dbContext.SaveChangesAsync();
 			}
-			catch (Exception)
-			{
-
-				throw;
-			}
-		}
+            catch (Exception) { throw; }
+        }
 		
 		public async Task DeleteAsync(int key)
 		{
 			try
 			{
-				Locomotive locomotiveFromDb = await ReadAsync(key);
+				Locomotive locomotiveFromDb = await ReadAsync(key)
+					?? throw new ArgumentException("Locomotive with the given key does not exist!");
 
-				if (locomotiveFromDb == null)
-				{
-					throw new ArgumentException("Locomotive with the given key does not exist!");	
-				}
-
-				dbContext.Locomotives.Remove(locomotiveFromDb);
+                dbContext.Locomotives.Remove(locomotiveFromDb);
 				await dbContext.SaveChangesAsync();
 			}
-			catch (Exception)
-			{
-
-				throw;
-			}
-		}
-
+            catch (Exception) { throw; }
+        }
 	}
 }

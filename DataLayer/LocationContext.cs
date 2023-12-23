@@ -13,41 +13,19 @@ namespace DataLayer
     {
         private readonly TrainDbContext dbContext;
 
-        public LocationContext() 
+        public LocationContext(TrainDbContext dbContext)
         { 
-            dbContext = new TrainDbContext();
+            this.dbContext = dbContext;
         }
 
         public async Task CreateAsync(Location item)
         {
             try
             {
-                this.dbContext.Add(item);
+                dbContext.Locations.Add(item);
                 await dbContext.SaveChangesAsync();
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public async Task DeleteAsync(int key)
-        {
-            try
-            {
-                Location locationFromDb = await ReadAsync(key, false, false);
-                if (locationFromDb!=null)
-                {
-                    dbContext.Locations.Remove(locationFromDb);
-                    await dbContext.SaveChangesAsync();
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            catch (Exception) { throw; }
         }
 
         public async Task<ICollection<Location>> ReadAllAsync(bool useNavigationalProperties = false, bool isReadOnly = true)
@@ -70,11 +48,7 @@ namespace DataLayer
 
                 return await query.ToListAsync();
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            catch (Exception) { throw; }
         }
 
         public async Task<Location> ReadAsync(int key, bool useNavigationalProperties = false, bool isReadOnly = true)
@@ -97,11 +71,7 @@ namespace DataLayer
 
                 return await query.FirstOrDefaultAsync(x=>x.Id == key);
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            catch (Exception) { throw; }
         }
 
         public async Task UpdateAsync(Location item, bool useNavigationalProperties = false)
@@ -118,18 +88,23 @@ namespace DataLayer
 
                 dbContext.Entry(locationFromDb).CurrentValues.SetValues(item);
 
-                if (useNavigationalProperties)
-                {
-                    //location will be changed from given class
-                }
-
                 await dbContext.SaveChangesAsync();
             }
-            catch (Exception)
+            catch (Exception) { throw; }
+        }
+        
+        public async Task DeleteAsync(int key)
+        {
+            try
             {
-
-                throw;
+                Location locationFromDb = await ReadAsync(key);
+                if (locationFromDb != null)
+                {
+                    dbContext.Locations.Remove(locationFromDb);
+                    await dbContext.SaveChangesAsync();
+                }
             }
+            catch (Exception) { throw; }
         }
     }
 }

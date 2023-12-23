@@ -92,10 +92,10 @@ namespace DataLayer
                 }
                 
                 Location locationA = await dbContext.Locations.FindAsync(item.LocationAId);
-                if (locationA != null) item.LocationA = locationA;
+                if (locationA != null) connectionFromDb.LocationA = locationA;
 
                 Location locationB = await dbContext.Locations.FindAsync(item.LocationBId);
-                if (locationB != null) item.LocationB = locationB;
+                if (locationB != null) connectionFromDb.LocationB = locationB;
 
                 await dbContext.SaveChangesAsync();
             }

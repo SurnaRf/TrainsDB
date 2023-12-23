@@ -17,6 +17,7 @@ namespace DataLayer
         {
             this.dbContext = dbContext;
         }
+
         public async Task CreateAsync(TrainComposition item)
 		{
 			try
@@ -31,11 +32,7 @@ namespace DataLayer
 				dbContext.TrainCompositions.Add(item);
 				await dbContext.SaveChangesAsync();
 			}
-			catch (Exception)
-			{
-
-				throw;
-			}
+			catch (Exception) { throw; }
 		}
 
 		public async Task<TrainComposition> ReadAsync(int key, bool useNavigationalProperties = false, bool isReadOnly = true)
@@ -52,14 +49,15 @@ namespace DataLayer
 						.Include(trnc => trnc.TrainCars);
 				}
 
-				return await query.FirstOrDefaultAsync(trnc => trnc.Id == key);
-			}
-			catch (Exception)
-			{
+                if (isReadOnly)
+                {
+                    query = query.AsNoTrackingWithIdentityResolution();
+                }
 
-				throw;
+                return await query.FirstOrDefaultAsync(trnc => trnc.Id == key);
 			}
-		}
+            catch (Exception) { throw; }
+        }
 
 		public async Task<ICollection<TrainComposition>> ReadAllAsync(bool useNavigationalProperties = false, bool isReadOnly = true)
 		{
@@ -72,17 +70,19 @@ namespace DataLayer
 					query = query.Include(trnc => trnc.Location)
 						.Include(trnc => trnc.LocomotiveA)
 						.Include(trnc => trnc.LocomotiveB)
-					.Include(trnc => trnc.TrainCars);
+						.Include(trnc => trnc.TrainCars);
 				}
 
-				return await query.ToListAsync();
-			}
-			catch (Exception)
-			{
+                if (isReadOnly)
+                {
+					query = query.AsNoTrackingWithIdentityResolution();
+                }
 
-				throw;
+                return await query.ToListAsync();
 			}
-		}
+            catch (Exception) { throw; }
+        }
+
 		public async Task UpdateAsync(TrainComposition item, bool useNavigationalProperties = false)
 		{
 			try
@@ -91,7 +91,7 @@ namespace DataLayer
 
 				if (trainCompositionFromDb == null)
 				{
-					CreateAsync(item);
+					await CreateAsync(item);
 					return;
 				}
 
@@ -153,11 +153,7 @@ namespace DataLayer
 
 				await dbContext.SaveChangesAsync();
 			}
-			catch (Exception)
-			{
-
-				throw;
-			}
+			catch (Exception) { throw; }
 		}
 
 		public async Task DeleteAsync(int key)
@@ -174,11 +170,7 @@ namespace DataLayer
 				dbContext.TrainCompositions.Remove(trainCompositionFromDb);
 				await dbContext.SaveChangesAsync();
 			}
-			catch (Exception)
-			{
-
-				throw;
-			}
-		}
+            catch (Exception) { throw; }
+        }
 	}
 }

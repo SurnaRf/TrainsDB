@@ -21,15 +21,12 @@ namespace BusinessLayer
 
         [Required]
         public Location Location { get; set; }
-
         [ForeignKey("Location")]
         public int LocationId { get; set; }
 
-        [Required]
         public TrainComposition TrainComposition { get; set; }
-
         [ForeignKey("TrainComposition")]
-        public int TrainCompositionId { get; set; }
+        public int? TrainCompositionId { get; set; }
 
         #endregion
 

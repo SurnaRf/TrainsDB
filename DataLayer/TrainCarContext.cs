@@ -1,6 +1,5 @@
 ﻿using BusinessLayer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,42 +12,33 @@ namespace DataLayer
     {
         private readonly TrainDbContext dbContext;
 
-        public TrainCarContext() 
+        public TrainCarContext(TrainDbContext dbContext) 
         {
-            dbContext = new TrainDbContext();    
+            this.dbContext = dbContext;
         }
 
         public async Task CreateAsync(TrainCar item)
         {
             try
             {
-                this.dbContext.Add(item);
+                Location locationFromDb = await dbContext.Locations.FindAsync(item.LocationId);
+
+                if (locationFromDb != null)
+                {
+                    item.Location = locationFromDb;
+                }
+
+                TrainComposition trainCompositionFromDb = await dbContext.TrainCompositions.FindAsync(item.TrainCompositionId);
+
+                if (trainCompositionFromDb != null)
+                {
+                    item.TrainComposition = trainCompositionFromDb;
+                }
+
+                dbContext.Add(item);
                 await dbContext.SaveChangesAsync();
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
-        }
-
-        public async Task DeleteAsync(int key)
-        {
-            try
-            {
-                TrainCar trainCarFromDb = await ReadAsync(key, false, false);
-
-                if (trainCarFromDb != null)
-                {
-                    dbContext.TrainCars.Remove(trainCarFromDb);
-                    await dbContext.SaveChangesAsync();
-                }
-            }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            catch (Exception) { throw; }
         }
 
         public async Task<ICollection<TrainCar>> ReadAllAsync(bool useNavigationalProperties = false, bool isReadOnly = true)
@@ -69,11 +59,7 @@ namespace DataLayer
 
                 return await query.ToListAsync();
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            catch (Exception) { throw; }
         }
 
         public async Task<TrainCar> ReadAsync(int key, bool useNavigationalProperties = false, bool isReadOnly = true)
@@ -94,11 +80,7 @@ namespace DataLayer
 
                 return await query.FirstOrDefaultAsync(x => x.Id == key);
             }
-            catch (Exception)
-            {
-
-                throw;
-            }
+            catch (Exception) { throw; }
         }
 
         public async Task UpdateAsync(TrainCar item, bool useNavigationalProperties = false)
@@ -117,21 +99,39 @@ namespace DataLayer
 
                 if (useNavigationalProperties)
                 {
-                    TrainComposition trainCompositionFromDb = await dbContext.TrainCompositions.FindAsync(item.TrainCompositionId);
+                    Location locationFromDb = await dbContext
+                        .Locations.FindAsync(item.LocationId);
+
+                    if (locationFromDb != null)
+                    {
+                        trainCarFromDb.Location = locationFromDb;
+                    }
+
+                    TrainComposition trainCompositionFromDb = await dbContext
+                        .TrainCompositions.FindAsync(item.TrainCompositionId);
 
                     if (trainCompositionFromDb != null)
                     {
-                        item.TrainComposition = trainCompositionFromDb;
+                        trainCarFromDb.TrainComposition = trainCompositionFromDb;
                     }
                 }
 
                 await dbContext.SaveChangesAsync();
             }
-            catch (Exception)
-            {
+            catch (Exception) { throw; }
+        }
 
-                throw;
+        public async Task DeleteAsync(int key)
+        {
+            try
+            {
+                TrainCar trainCarFromDb = await ReadAsync(key, false, false)
+                    ?? throw new InvalidOperationException("Train car with the given key does not exist!");
+
+                dbContext.TrainCars.Remove(trainCarFromDb);
+                await dbContext.SaveChangesAsync();
             }
+            catch (Exception) { throw; }
         }
     }
 }
