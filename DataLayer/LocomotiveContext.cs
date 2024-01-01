@@ -38,24 +38,22 @@ namespace DataLayer
 		{
 			try
 			{
-				var item = await dbContext.Locomotives.FindAsync(key);
-				//IQueryable<Locomotive> query = dbContext.Locomotives;
+				IQueryable<Locomotive> query = dbContext.Locomotives;
 
 				if (useNavigationalProperties)
 				{
-					await dbContext.Entry(item).Reference(l => l.Location).LoadAsync();
-					await dbContext.Entry(item).Reference(l => l.TrainComposition).LoadAsync();
-
-					//query = query.Include(l => l.Location).Include(l => l.TrainComposition);
+					query = query
+						.Include(l => l.Location)
+						.Include(l => l.TrainComposition);
 				}
 
 				if (isReadOnly)
-				{					
-					//query = query.AsNoTrackingWithIdentityResolution();
+				{
+					query = query.AsNoTrackingWithIdentityResolution();
 				}
 
-				return await dbContext.Locomotives.FirstOrDefaultAsync(l => l.Id == key);//.FirstOrDefaultAsync(l => l.Id == key);
-			}
+				return await query.FirstOrDefaultAsync(l => l.Id == key);
+            }
             catch (Exception) { throw; }
         }
 

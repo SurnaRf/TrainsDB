@@ -45,14 +45,27 @@ namespace DataLayer
                 .Property(c => c.Coordinates)
                 .HasConversion(new CoordinatesConvertor());
 
+            modelBuilder.Entity<Locomotive>()
+                .HasOne(l => l.TrainComposition)
+                .WithMany(trcn => trcn.Locomotives)
+                .HasForeignKey(l => l.TrainCompositionId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<TrainCar>()
+                .HasOne(tc => tc.TrainComposition)
+                .WithMany(trcn => trcn.TrainCars)
+                .HasForeignKey(tc => tc.TrainCompositionId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.NoAction);
+
             modelBuilder.Entity<Connection>()
                 .HasOne(c => c.NodeA)
-                .WithMany(l => (IEnumerable<Connection>)l.ConnectionsA)
+                .WithMany(l => l.ConnectionsA)
                 .HasForeignKey(c => c.NodeAId)
                 .OnDelete(DeleteBehavior.Cascade);
             modelBuilder.Entity<Connection>()
                 .HasOne(c => c.NodeB)
-                .WithMany(l => (IEnumerable<Connection>)l.ConnectionsB)
+                .WithMany(l => l.ConnectionsB)
                 .HasForeignKey(c => c.NodeBId)
                 .OnDelete(DeleteBehavior.Cascade);
 

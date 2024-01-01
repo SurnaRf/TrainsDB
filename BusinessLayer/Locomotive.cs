@@ -46,10 +46,5 @@ namespace BusinessLayer
 			Location = location;
             TrainComposition = trainComposition;
 		}
-
-        public bool CanCarryComposition(TrainComposition trainComposition)
-        {
-            return trainComposition.TotalWeight() <= CarryingCapacity;
-        }
     }
 }

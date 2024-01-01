@@ -23,12 +23,12 @@ namespace ServiceLayer
 
         public async Task<T> ReadAsync(K key, bool useNavigationalProperties = false, bool isReadOnly = true)
         {
-            return await context.ReadAsync(key);
+            return await context.ReadAsync(key, useNavigationalProperties, isReadOnly);
         }
 
         public async Task<ICollection<T>> ReadAllAsync(bool useNavigationalProperties = false, bool isReadOnly = true)
         {
-            return await context.ReadAllAsync(useNavigationalProperties);
+            return await context.ReadAllAsync(useNavigationalProperties, isReadOnly);
         }
 
         public async Task UpdateAsync(T item, bool useNavigationalProperties = false)
