@@ -29,7 +29,7 @@ namespace BusinessLayer
 		public List<TrainCar> TrainCars { get; set; }
 
         #endregion
-
+        
         public Location() 
         {
             ConnectionsA = new();
