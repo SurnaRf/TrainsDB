@@ -20,7 +20,7 @@ namespace DataLayer
             if (!optionsBuilder.IsConfigured)
             {
                 #warning Change connection string
-                optionsBuilder.UseSqlServer("Server=ZORCH-LAPTOP\\SQLSERVER;Database=TrainDb;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=;Database=TrainDb;Trusted_Connection=True;");
             }
 
             base.OnConfiguring(optionsBuilder);
