@@ -1,6 +1,5 @@
 ﻿namespace BusinessLayer.Terrain
 {
-    [Flags]
     public enum TerrainType
     {
         Plains   = (1 << 0),

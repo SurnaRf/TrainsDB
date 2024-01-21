@@ -1,0 +1,87 @@
+﻿@model BusinessLayer.TrainComposition
+
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>TrainComposition</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TrainType)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TrainType)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Location)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Location.Name)
+        </dd>
+    </dl>
+
+    <h5>Locomotives</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th> Nickname </th>
+                <th> Carrying Capacity </th>
+                <th> LocomotiveType </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.Locomotives)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Nickname)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.CarryingCapacity)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LocomotiveType)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <h5>Train Cars</h5>
+    <table class="table">
+        <thead>
+            <tr>
+                <th> Train Car Type </th>
+                <th> Weight </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.TrainCars)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TrainCarType)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Weight)
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>

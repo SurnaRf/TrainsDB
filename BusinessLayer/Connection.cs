@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using BusinessLayer.Terrain;
 using Pathfinding;
@@ -16,14 +17,18 @@ namespace BusinessLayer
         #region Navigation
 
         [Required]
+        [DisplayName("Location A")]
         public Location NodeA { get; set; }
 
+        [DisplayName("Location A")]
         [ForeignKey("NodeA")]
         public int NodeAId { get; set; }
 
         [Required]
+        [DisplayName("Location B")]
         public Location NodeB { get; set; }
-        
+
+        [DisplayName("Location B")]
         [ForeignKey("NodeB")]
         public int NodeBId { get; set; }
 
@@ -33,12 +38,13 @@ namespace BusinessLayer
         {
             get
             {
+                if (NodeA == null || NodeB == null) return 0;
                 return NodeA.Coordinates.Distance(NodeB.Coordinates)
-                    * TerrainTypeValueConverter.TotalModifier(TerrainType);
+                    * TerrainTypeValueConverter.SpecificModifier(TerrainType);
             }
         }
 
-        private Connection()
+        public Connection()
         {
 
         }

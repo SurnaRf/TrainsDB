@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -13,6 +14,9 @@ namespace BusinessLayer
         [Key]
         public int Id { get; set; }
         
+        public string Name { get; set; }
+
+        [DisplayName("Train Type")]
         public TrainType TrainType { get; set; }
 
         #region Navigation
@@ -21,6 +25,7 @@ namespace BusinessLayer
 		public Location Location { get; set; }
 
         [ForeignKey("LocationId")]
+        [DisplayName("Location")]
         public int LocationId { get; set; }
 
         public List<Locomotive> Locomotives { get; set; }
@@ -36,10 +41,12 @@ namespace BusinessLayer
         }
 
         public TrainComposition(
+            string name,
             TrainType trainType,
             Location location)
             : this()
 		{
+            Name = name;
             TrainType = trainType;
             Location = location;
         }
@@ -53,5 +60,9 @@ namespace BusinessLayer
             }
             return total;
         }
+
+        public const int NoneId = 0;
+        public const string NoneName = "<None>";
+        public static readonly TrainComposition None = new() { Id = NoneId, Name = NoneName };
 	}
 }

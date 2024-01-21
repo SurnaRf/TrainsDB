@@ -25,7 +25,7 @@ namespace TestingLayer
 		{
 			location = new("Amsterdam", new(52.3, 4.9));
 
-			trainComposition = new(TrainType.Passenger, location);
+			trainComposition = new("com", TrainType.Passenger, location);
 
 			locomotive = new("Loc1", 12000, LocomotiveType.Electric, location);
 

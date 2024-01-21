@@ -12,7 +12,6 @@ namespace BusinessLayer
         [Key]
 		public int Id { get; set; }
 
-		[Required]
 		public string Name { get; set; }
 
 		public Coordinates Coordinates { get; set; }

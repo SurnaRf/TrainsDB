@@ -9,16 +9,18 @@ namespace BusinessLayer
 {
 	public class User
 	{
-        [Required]
+		[Key]
+		public string Id { get; set; }
+
         public string FirstName { get; set; }
 
-        [Required]
         public string LastName { get; set; }
 
         public User() { }
 		
         public User(string firstName, string lastName)
 		{
+			Id = Guid.NewGuid().ToString();
 			FirstName = firstName;
 			LastName = lastName;
 		}

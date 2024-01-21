@@ -1,0 +1,48 @@
+﻿@model BusinessLayer.Connection
+@using BusinessLayer.Terrain;
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Connection</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="TerrainType" class="control-label"></label>
+                @Html.DropDownListFor(
+                         connection => connection.TerrainType,
+                         Html.GetEnumSelectList<TerrainType>(),
+                         new { @class = "form-control" })
+                <span asp-validation-for="TerrainType" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NodeAId" class="control-label"></label>
+                <select asp-for="NodeAId" class="form-control" asp-items="ViewBag.NodeAId"></select>
+                <span asp-validation-for="NodeAId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="NodeBId" class="control-label"></label>
+                <select asp-for="NodeBId" class="form-control" asp-items="ViewBag.NodeBId"></select>
+                <span asp-validation-for="NodeBId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

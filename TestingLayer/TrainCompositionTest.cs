@@ -25,7 +25,7 @@ namespace TestingLayer
 		{
 			location = new("Amsterdam", new(52.3, 4.9));
 
-			composition = new(TrainType.Passenger, location);
+			composition = new("com", TrainType.Passenger, location);
 
 			loc1 = new("Loc1", 15000, LocomotiveType.Diesel, location, composition);
 			loc2 = new("Loc2", 12000, LocomotiveType.Electric, location, composition);
@@ -55,7 +55,7 @@ namespace TestingLayer
 		[Test]
 		public async Task CreateAsync()
 		{
-			TrainComposition trainComposition = new(TrainType.Passenger,location);
+			TrainComposition trainComposition = new("com", TrainType.Passenger,location);
 
 			int compositionsBefore = dbContext.TrainCompositions.Count();
 

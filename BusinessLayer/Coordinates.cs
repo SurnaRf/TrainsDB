@@ -11,10 +11,20 @@ namespace BusinessLayer
         public double X { get; set; }
         public double Y { get; set; }
 
+        public Coordinates() { }
+        
         public Coordinates(double X, double Y)
         {
             this.X = X;
             this.Y = Y;
+        }
+
+        public static implicit operator Coordinates(string value)
+        {
+            string[] split = value.Split(',', ';', StringSplitOptions.TrimEntries);
+            double x = double.Parse(split[0]);
+            double y = double.Parse(split[1]);
+            return new(x, y);
         }
 
         public double Distance(Coordinates other)
@@ -40,6 +50,11 @@ namespace BusinessLayer
             double Y = reader.ReadDouble();
             Coordinates result = new(X, Y);
             return result;
+        }
+
+        public override string ToString()
+        {
+            return $"(X: {X}; Y: {Y})";
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
@@ -13,6 +14,7 @@ namespace BusinessLayer
         [Key]
         public int Id { get; set; }
 
+        [DisplayName("Train Car Type")]
         public TrainCarType TrainCarType { get; set; }
 
         public double Weight { get; set; }
@@ -21,11 +23,16 @@ namespace BusinessLayer
 
         [Required]
         public Location Location { get; set; }
+        
         [ForeignKey("Location")]
+        [DisplayName("Location")]
         public int LocationId { get; set; }
 
-        public TrainComposition TrainComposition { get; set; }
+        [DisplayName("Train Composition")]
+        public TrainComposition? TrainComposition { get; set; }
+        
         [ForeignKey("TrainComposition")]
+        [DisplayName("Train Composition")]
         public int? TrainCompositionId { get; set; }
 
         #endregion
@@ -36,7 +43,7 @@ namespace BusinessLayer
             TrainCarType trainCarType,
             double weight,
             Location location,
-            TrainComposition trainComposition = null)
+            TrainComposition? trainComposition = null)
         {
             TrainCarType = trainCarType;
             Location = location;

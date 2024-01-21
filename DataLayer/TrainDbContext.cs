@@ -20,7 +20,7 @@ namespace DataLayer
             if (!optionsBuilder.IsConfigured)
             {
                 #warning Change connection string
-                optionsBuilder.UseSqlServer("Server=;Database=TrainDb;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=ZORCH-LAPTOP\\SQLSERVER;Database=TrainDb;Trusted_Connection=True;");
             }
 
             base.OnConfiguring(optionsBuilder);
@@ -62,12 +62,12 @@ namespace DataLayer
                 .HasOne(c => c.NodeA)
                 .WithMany(l => l.ConnectionsA)
                 .HasForeignKey(c => c.NodeAId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
             modelBuilder.Entity<Connection>()
                 .HasOne(c => c.NodeB)
                 .WithMany(l => l.ConnectionsB)
                 .HasForeignKey(c => c.NodeBId)
-                .OnDelete(DeleteBehavior.Cascade);
+                .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(modelBuilder);
         }

@@ -49,7 +49,7 @@ namespace DataLayer
 
                 if (useNavigationalProperties)
                 {
-                    query.Include(x => x.Location).Include(x => x.TrainComposition);
+                    query = query.Include(x => x.Location).Include(x => x.TrainComposition);
                 }
 
                 if (isReadOnly)
@@ -70,7 +70,7 @@ namespace DataLayer
 
                 if (useNavigationalProperties)
                 {
-                    query.Include(x => x.Location).Include(x => x.TrainComposition);
+                    query = query.Include(x => x.Location).Include(x => x.TrainComposition);
                 }
 
                 if (isReadOnly)
