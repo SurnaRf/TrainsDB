@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using BusinessLayer;
 using DataLayer;
 using ServiceLayer;
+using MessagePack;
 
 namespace TrainsMVC.Controllers
 {
@@ -104,6 +105,8 @@ namespace TrainsMVC.Controllers
             {
                 return NotFound();
             }
+
+            
             
             await MakeValid(locomotive);
             if (locomotive.Location != null)
@@ -125,6 +128,8 @@ namespace TrainsMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+
+
             await LoadNavigation(locomotive);
             return View(locomotive);
         }
@@ -164,19 +169,24 @@ namespace TrainsMVC.Controllers
         {
             ModelState.Clear();
 
-            locomotive.Location = await locationManager.ReadAsync(locomotive.LocationId);
-            
             bool hasComposition = !(locomotive.TrainCompositionId == TrainComposition.NoneId);
             if (hasComposition)
             {
                 locomotive.TrainComposition
                     = await trainCompositionManager.ReadAsync((int)locomotive.TrainCompositionId!);
+
+                if (locomotive.TrainComposition != null)
+                {
+                    locomotive.LocationId = locomotive.TrainComposition.LocationId;
+                }
             }
             else
             {
                 locomotive.TrainCompositionId = null;
                 locomotive.TrainComposition = null;
             }
+
+            locomotive.Location = await locationManager.ReadAsync(locomotive.LocationId);
             
             ModelState.Clear();
         }
