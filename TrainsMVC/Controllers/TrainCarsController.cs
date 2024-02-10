@@ -161,24 +161,49 @@ namespace TrainsMVC.Controllers
 
         private async Task MakeValid(TrainCar trainCar)
         {
-            trainCar.Location = await locationManager.ReadAsync(trainCar.LocationId);
+            ModelState.Clear();
 
-            bool hasComposition = !(trainCar.TrainCompositionId == null || trainCar.TrainCompositionId == TrainComposition.NoneId);
-            if (!hasComposition)
+            bool hasComposition = !(trainCar.TrainCompositionId == TrainComposition.NoneId);
+            if (hasComposition)
+            {
+                trainCar.TrainComposition
+                    = await trainCompositionManager.ReadAsync((int)trainCar.TrainCompositionId!);
+                bool locationMatches = trainCar.TrainComposition.LocationId == trainCar.LocationId; 
+
+                if (!locationMatches)
+                {
+                    trainCar.TrainCompositionId = null;
+                    trainCar.TrainComposition = null;
+                }
+            }
+            else
             {
                 trainCar.TrainCompositionId = null;
                 trainCar.TrainComposition = null;
-                return;
             }
 
-            trainCar.TrainComposition = await trainCompositionManager.ReadAsync((int)trainCar.TrainCompositionId!);
+            trainCar.Location = await locationManager.ReadAsync(trainCar.LocationId);
+
+            ModelState.Clear();
         }
 
         private async Task LoadNavigation(TrainCar? selectedValues = null)
         {
             var locations = await locationManager.ReadAllAsync();
 
-            var trainCompositions = (await trainCompositionManager.ReadAllAsync()).ToList();
+            var trainCompositionsQuery = await trainCompositionManager.ReadAllAsync();
+            List<TrainComposition>? trainCompositions = null;
+            if(selectedValues != null)
+            {
+                trainCompositions = trainCompositionsQuery
+                    .Where(x => x.LocationId == selectedValues.LocationId)
+                    .ToList();
+            }
+            else
+            {
+                trainCompositions = trainCompositionsQuery.ToList();
+            }
+
             trainCompositions.Insert(0, TrainComposition.None);
 
             if (selectedValues == null)

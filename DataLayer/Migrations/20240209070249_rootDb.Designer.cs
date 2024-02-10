@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace DataLayer.Migrations
 {
     [DbContext(typeof(TrainDbContext))]
-    [Migration("20240121160104_root")]
-    partial class root
+    [Migration("20240209070249_rootDb")]
+    partial class rootDb
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
