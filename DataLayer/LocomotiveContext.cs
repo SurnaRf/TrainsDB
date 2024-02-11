@@ -25,10 +25,17 @@ namespace DataLayer
 
 				if (locationFromDb != null)
 				{
-					 item.Location = locationFromDb;
+					item.Location = locationFromDb;
 				}
 
-				dbContext.Locomotives.Add(item);
+                TrainComposition trainCompositionFromDb = await dbContext.TrainCompositions.FindAsync(item.TrainCompositionId);
+
+                if (trainCompositionFromDb != null)
+                {
+                    item.TrainComposition = trainCompositionFromDb;
+                }
+
+                dbContext.Locomotives.Add(item);
 				await dbContext.SaveChangesAsync();
 			}
 			catch (Exception) { throw; }

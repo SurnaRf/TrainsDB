@@ -168,8 +168,8 @@ namespace TrainsMVC.Controllers
             {
                 trainCar.TrainComposition
                     = await trainCompositionManager.ReadAsync((int)trainCar.TrainCompositionId!);
+                
                 bool locationMatches = trainCar.TrainComposition.LocationId == trainCar.LocationId; 
-
                 if (!locationMatches)
                 {
                     trainCar.TrainCompositionId = null;

@@ -35,7 +35,7 @@ namespace DataLayer
                     item.TrainComposition = trainCompositionFromDb;
                 }
 
-                dbContext.Add(item);
+                dbContext.TrainCars.Add(item);
                 await dbContext.SaveChangesAsync();
             }
             catch (Exception) { throw; }

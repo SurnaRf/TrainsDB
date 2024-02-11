@@ -67,7 +67,6 @@ namespace TrainsMVC.Controllers
         public async Task<IActionResult> Create([Bind("Id,Nickname,CarryingCapacity,LocomotiveType,LocationId,TrainCompositionId")] Locomotive locomotive)
         {
             await MakeValid(locomotive);
-            ModelState.Clear();
             if (locomotive.Location != null)
             {
                 await locomotiveManager.CreateAsync(locomotive);
@@ -106,8 +105,6 @@ namespace TrainsMVC.Controllers
                 return NotFound();
             }
 
-            
-            
             await MakeValid(locomotive);
             if (locomotive.Location != null)
             {
