@@ -15,13 +15,19 @@ namespace TrainsMVC.Controllers
     {
         private readonly GenericManager<TrainComposition, int> trainCompositionManager;
         private readonly GenericManager<Location, int> locationManager;
+        private readonly GenericManager<Locomotive, int> locomotiveManager;
+        private readonly GenericManager<TrainCar, int> trainCarManager;
 
         public TrainCompositionsController(
             GenericManager<TrainComposition, int> trainCompositionManager,
-            GenericManager<Location, int> locationManager)
+            GenericManager<Location, int> locationManager, 
+            GenericManager<Locomotive, int> locomotiveManager, 
+            GenericManager<TrainCar, int> trainCarManager)
         {
             this.trainCompositionManager = trainCompositionManager;
             this.locationManager = locationManager;
+            this.locomotiveManager = locomotiveManager;
+            this.trainCarManager = trainCarManager;
         }
 
         // GET: TrainCompositions
@@ -106,8 +112,8 @@ namespace TrainsMVC.Controllers
             if (TryValidateModel(trainComposition))
             {
                 try
-                {
-                    await trainCompositionManager.UpdateAsync(trainComposition);
+                {                   
+                   await trainCompositionManager.UpdateAsync(trainComposition);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -159,7 +165,12 @@ namespace TrainsMVC.Controllers
 
         private async Task MakeValid(TrainComposition trainComposition)
         {
-            trainComposition.Location = await locationManager.ReadAsync(trainComposition.LocationId);
+            Location newLocation = await locationManager.ReadAsync(trainComposition.LocationId);
+            
+            await LogicUtility.UpdateLocationOfComposition
+                       (trainCompositionManager, locomotiveManager, trainCarManager, trainComposition, newLocation);
+
+            trainComposition.Location = newLocation;
         }
 
         private async Task LoadNavigation(TrainComposition? selectedValues = null)
