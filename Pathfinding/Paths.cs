@@ -35,6 +35,7 @@ namespace Pathfinding
 
             while (!destination.Equals(Start))
             {
+                if (!Parents.ContainsKey(destination)) break;
                 destination = Parents[destination].Other(destination);
                 path.Push(destination);
             }
@@ -48,6 +49,7 @@ namespace Pathfinding
 
             while (!destination.Equals(Start))
             {
+                if (!Parents.ContainsKey(destination)) break;
                 path.Push(Parents[destination]);
                 destination = Parents[destination].Other(destination);
             }

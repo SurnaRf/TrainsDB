@@ -63,6 +63,7 @@ namespace Pathfinding
 
                 V current = state.node;
 
+                if (!graph.Structure.ContainsKey(current)) continue;
                 foreach (IEdge<V> edge in graph.Structure[current])
                 {
                     V other = edge.Other(current);

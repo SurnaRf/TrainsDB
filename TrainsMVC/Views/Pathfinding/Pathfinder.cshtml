@@ -1,0 +1,67 @@
+﻿@model PathQuery
+@using BusinessLayer;
+@using Pathfinding;
+
+@{
+    ViewData["Title"] = "Pathfinder";
+}
+
+<h1>Pathfinder</h1>
+
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Pathfinder" style="display:flex;flex-direction:row;align-content:center;justify-content:space-evenly">
+            
+            <div class="form-group">
+                <label asp-for="LocationFromId" class="control-label"></label>
+                <select asp-for="LocationFromId" class ="form-control" asp-items="ViewBag.LocationFromId"></select>
+            </div>
+            
+            <div class="form-group">
+                <label asp-for="LocationToId" class="control-label"></label>
+                <select asp-for="LocationToId" class="form-control" asp-items="ViewBag.LocationToId"></select>
+            </div>
+
+            <br />
+            
+            <div class="form-group">
+                <input type="submit" value="Search" class="btn btn-primary" />
+            </div>
+        
+        </form>
+    </div>
+</div>
+
+@if(Model != null && Model.Path != null)
+{
+    <div class="row">
+        <table class="table">
+    <thead>
+        <tr>
+            <th> From </th>
+            <th> To </th>
+            <th> Weight </th>
+        </tr>
+    </thead>
+    <tbody>
+    @{
+        Location previous = Model.LocationFrom!;
+        foreach (var item in Model.Path)
+        {
+            <tr>
+                <td> @(previous.Name) </td>
+                <td> @(item.Other(previous).Name) </td>
+                <td> @(item.Weight) </td>
+            </tr>
+            previous = item.Other(previous);
+        }
+    }
+    </tbody>
+    </table>
+    </div>
+}
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

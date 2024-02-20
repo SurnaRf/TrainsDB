@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BusinessLayer
 {
-	public class Location
+    public class Location : IEquatable<Location>
 	{
         [Key]
 		public int Id { get; set; }
@@ -43,6 +43,21 @@ namespace BusinessLayer
         {
             Name = name;
             Coordinates = coordinates;
+        }
+
+        public override int GetHashCode()
+        {
+            return Id;
+        }
+
+        public override bool Equals(object? obj)
+        {
+            return Equals(obj as Location);
+        }
+
+        public bool Equals(Location? other)
+        {
+            return other != null && other.Id == Id;
         }
     }
 }

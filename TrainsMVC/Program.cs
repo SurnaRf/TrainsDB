@@ -1,5 +1,6 @@
 using BusinessLayer;
 using DataLayer;
+using Microsoft.EntityFrameworkCore;
 using ServiceLayer;
 
 namespace TrainsMVC
@@ -13,7 +14,11 @@ namespace TrainsMVC
             // Add services to the container.
             builder.Services.AddControllersWithViews();
             // Connection, Location, Locomotive, TrainCar, TrainComposition
-            builder.Services.AddScoped<TrainDbContext, TrainDbContext>();
+            string connectionString = builder.Configuration["ConnectionString"];
+            builder.Services.AddDbContext<TrainDbContext>(options =>
+            {
+                options.UseSqlServer(connectionString); 
+            }, ServiceLifetime.Scoped);
 
             builder.Services.AddScoped<IDb<Connection, int>, ConnectionContext>();
             builder.Services.AddScoped<IDb<Location, int>, LocationContext>();

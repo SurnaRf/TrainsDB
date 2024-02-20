@@ -12,9 +12,11 @@ namespace ServiceLayer
 {
     public class PathfindingUtility
     {
-        public static async Task<Paths<Location>> GetPaths(Location start, ConnectionContext connectionContext)
+        public static async Task<Paths<Location>> GetPaths(
+            Location start,
+            IDb<Connection, int> connectionContext)
         {
-            var edges = await connectionContext.ReadAllAsync();
+            var edges = await connectionContext.ReadAllAsync(true);
             Paths<Location> result = Solver.FindShortestPaths(edges, start);
             return result;
         }
