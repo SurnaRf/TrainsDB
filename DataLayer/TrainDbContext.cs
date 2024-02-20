@@ -20,7 +20,7 @@ namespace DataLayer
             if (!optionsBuilder.IsConfigured)
             {
                 #warning Change connection string
-                optionsBuilder.UseSqlServer("Server=MSWIN;Database=TrainDb;Trusted_Connection=True;");
+                optionsBuilder.UseSqlServer("Server=DESKTOP-F3IKLD2;Database=TrainDb;Trusted_Connection=True;");
             }
 
             base.OnConfiguring(optionsBuilder);

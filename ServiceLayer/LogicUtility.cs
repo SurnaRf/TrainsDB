@@ -11,6 +11,13 @@ namespace ServiceLayer
 {
     public class LogicUtility
     {
+        public static async Task LoadNavigation(TrainDbContext dbContext, TrainComposition trainComposition)
+        {
+            await dbContext.Entry(trainComposition).Reference(trcn => trcn.Location).LoadAsync();
+            await dbContext.Entry(trainComposition).Collection(trcn => trcn.Locomotives).LoadAsync();
+            await dbContext.Entry(trainComposition).Collection(trcn => trcn.TrainCars).LoadAsync();
+        }
+
         public static async Task UpdateLocationOfComposition(
             IDb<TrainComposition, int> compositionContext,
             IDb<Locomotive, int> locomotiveContext,
@@ -25,17 +32,18 @@ namespace ServiceLayer
             if(isOnThatLocation || !CanMove(trainComposition)) return;
 
             trainComposition.Location = newLocation;
+            trainComposition.LocationId = newLocation.Id;
             await compositionContext.UpdateAsync(trainComposition, true);
 
             foreach(Locomotive locomotive in trainComposition.Locomotives)
             {
-                locomotive.Location = newLocation;
+                locomotive.LocationId = newLocation.Id;
                 await locomotiveContext.UpdateAsync(locomotive, true);
             }
 
             foreach(TrainCar trainCar in trainComposition.TrainCars)
             {
-                trainCar.Location = newLocation;
+                trainCar.LocationId = newLocation.Id;
                 await trainCarContext.UpdateAsync(trainCar, true);
             }
         }

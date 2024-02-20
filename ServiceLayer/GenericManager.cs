@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ServiceLayer
 {
-    public class GenericManager<T, K> where K : IConvertible
+    public class GenericManager<T, K> : IDb<T, K> where K : IConvertible
     {
         private readonly IDb<T, K> context;
 
