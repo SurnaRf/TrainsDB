@@ -7,11 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="Pages\Locations\Index.razor" />
-    <Content Remove="Pages\Locomotives\Index.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Folder Include="Pages\PathFinding\" />
   </ItemGroup>
 
@@ -22,11 +17,6 @@
   <ItemGroup>
     <_ContentIncludedByDefault Remove="Pages\Locations\Index.razor" />
     <_ContentIncludedByDefault Remove="Pages\Locomotives\Index.razor" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Pages\Locations\Index.razor" />
-    <None Include="Pages\Locomotives\Index.razor" />
   </ItemGroup>
 
   <ItemGroup>

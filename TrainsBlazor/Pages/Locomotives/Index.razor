@@ -54,7 +54,8 @@
                         @locomotive.Location.Name
                     </td>
                     <td>
-                        @locomotive.TrainComposition.Name
+                        @(locomotive.TrainComposition != null ? locomotive.TrainComposition.Name : "None")
+                        
                     </td>
                     <td>
                         <a href="locomotives/edit/@locomotive.Id">Edit</a> |
