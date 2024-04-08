@@ -1,0 +1,98 @@
+﻿@page "/locomotives"
+@using ServiceLayer;
+@using BusinessLayer;
+@inject GenericManager<Locomotive, int> locomotiveManager
+@inject NavigationManager navigationManager;
+
+<h3>Index</h3>
+
+<p>
+    <a href="locomotives/create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Nickname
+            </th>
+            <th>
+                Carrying capacity
+            </th>
+            <th>
+                Locomotive type
+            </th>
+            <th>
+                Location
+            </th>
+            <th>
+                Train composition
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model == null)
+        {
+            <tr><td>Loading...</td></tr>
+        }
+
+        else
+        {
+            @foreach (Locomotive locomotive in Model)
+            {
+                <tr>
+                    <td>
+                        @locomotive.Nickname
+                    </td>
+                    <td>
+                        @locomotive.CarryingCapacity
+                    </td>
+                    <td>
+                        @locomotive.LocomotiveType
+                    </td>
+                    <td>
+                        @locomotive.Location.Name
+                    </td>
+                    <td>
+                        @locomotive.TrainComposition.Name
+                    </td>
+                    <td>
+                        <a href="locomotives/edit/@locomotive.Id">Edit</a> |
+                        <a href="locomotives/details/@locomotive.Id">Details</a> |
+                        <a href="locomotives/delete/@locomotive.Id">Delete</a> |
+                        <a href="locomotives" @onclick="(() => OnFastDelete(locomotive.Id))">Fast Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+
+@code
+{
+    IEnumerable<Locomotive> Model;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await locomotiveManager.ReadAllAsync(true);
+        await base.OnInitializedAsync();
+    }
+
+    async Task OnFastDelete(int id)
+    {
+        try
+        {
+            await locomotiveManager.DeleteAsync(id);
+
+            Model = await locomotiveManager.ReadAllAsync(true);
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+}
+

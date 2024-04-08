@@ -13,7 +13,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ServiceLayer", "ServiceLaye
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestingLayer", "TestingLayer\TestingLayer.csproj", "{5C871443-8D48-42C3-AA24-89E0FC0540F5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrainsMVC", "TrainsMVC\TrainsMVC.csproj", "{BC789C0B-975E-4E7F-B31B-61827F441A04}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainsMVC", "TrainsMVC\TrainsMVC.csproj", "{BC789C0B-975E-4E7F-B31B-61827F441A04}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TrainsBlazor", "TrainsBlazor\TrainsBlazor.csproj", "{EB87C354-0543-42C5-A71D-2EF214FA4555}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{BC789C0B-975E-4E7F-B31B-61827F441A04}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BC789C0B-975E-4E7F-B31B-61827F441A04}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BC789C0B-975E-4E7F-B31B-61827F441A04}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EB87C354-0543-42C5-A71D-2EF214FA4555}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EB87C354-0543-42C5-A71D-2EF214FA4555}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EB87C354-0543-42C5-A71D-2EF214FA4555}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EB87C354-0543-42C5-A71D-2EF214FA4555}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

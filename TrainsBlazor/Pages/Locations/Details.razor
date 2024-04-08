@@ -1,0 +1,55 @@
+﻿@page "/locations/details/{Id}"
+@using BusinessLayer;
+@using ServiceLayer;
+@inject GenericManager<Location, int> locationManager;
+
+<h3>Details</h3>
+
+<div>
+    <h4>Location</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Name
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Name
+        </dd>
+        <dt class="col-sm-2">
+            Coordinates
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Coordinates
+        </dd>       
+        <dt class="col-sm-2">
+            Connections A
+        </dt>
+        <dd class="col-sm-10">
+            @string.Join(", ", Model.ConnectionsA.Select(a => a.Id))
+        </dd>
+        <dt class="col-sm-2">
+            Connections B
+        </dt>
+        <dd class="col-sm-10">
+            @string.Join(", ", Model.ConnectionsB.Select(b => b.Id))
+        </dd>
+    </dl>
+</div>
+<div>
+    <a href="locations/edit/@Model.Id">Edit</a> |
+    <a href="locations">Back to List</a>
+</div>
+
+@code
+{
+    Location Model = new();
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await locationManager.ReadAsync(Id, true);
+    }
+
+}

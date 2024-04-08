@@ -1,0 +1,102 @@
+﻿@page "/locomotives/edit/{Id:int}"
+@using BusinessLayer;
+@using ServiceLayer;
+@inject GenericManager<Locomotive, int> locomotiveManager;
+@inject GenericManager<Location, int> locationManager;
+@inject GenericManager<TrainComposition, int> trainCompositionManager;
+@inject NavigationManager navigationManager;
+
+<h3>Edit</h3>
+
+
+<h4>Locomotive</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="Model" OnValidSubmit="OnUpdated">
+            <DataAnnotationsValidator />
+            <input type="hidden" @bind-value="Model.Id" />
+            <div class="form-group">
+                <label class="control-label">Nickname</label>
+                <input @bind-value="Model.Nickname" class="form-control" />
+                <ValidationMessage For="@( () => Model.Nickname )" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Locomotive Type</label>
+                <input @bind-value="Model.LocomotiveType" class="form-control" />
+                <ValidationMessage For="@( () => Model.LocomotiveType )" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Carrying capacity</label>
+                <input @bind-value="Model.CarryingCapacity" class="form-control" />
+                <ValidationMessage For="@( () => Model.CarryingCapacity )" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Location</label>
+                <InputSelect @bind-Value="Model.LocationId" class="form-control">
+                    @foreach (var item in Locations)
+                    {
+                        if (item.Id == Model.LocationId)
+                        {
+                            <option selected value="@item.Id"> @item.Name </option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id"> @item.Name </option>
+                        }
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="form-group">
+                <label class="control-label">Train composition</label>
+                <InputSelect @bind-Value="Model.TrainCompositionId" class="form-control">
+                    @foreach (var item in Compositions)
+                    {
+                        if (item.Id == Model.TrainCompositionId)
+                        {
+                            <option selected value="@item.Id"> @item.Name </option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id"> @item.Name </option>
+                        }
+                    }
+                </InputSelect>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="locomotives">Back to List</a>
+</div>
+
+@code
+{
+    Locomotive Model = new();
+    ICollection<Location> Locations = new List<Location>();
+    ICollection<TrainComposition> Compositions = new List<TrainComposition>();
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Locations = await locationManager.ReadAllAsync();
+        Compositions = await trainCompositionManager.ReadAllAsync();
+
+        Model = await locomotiveManager.ReadAsync(Id, true, false);
+    }
+
+    private async Task OnUpdated()
+    {
+        await locomotiveManager.UpdateAsync(Model, true);
+        navigationManager.NavigateTo("locomotives");
+    }
+
+}

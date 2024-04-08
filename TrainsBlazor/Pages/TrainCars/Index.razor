@@ -1,0 +1,98 @@
+﻿@page "/traincars"
+@using ServiceLayer;
+@using BusinessLayer;
+@inject GenericManager<TrainCar, int> trainCarManager
+@inject NavigationManager navigationManager;
+
+<h3>Index</h3>
+
+<p>
+    <a href="traincars/create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Weight
+            </th>
+            <th>
+                Train car type
+            </th>
+            <th>
+                Location
+            </th>
+            <th>
+                Train composition
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model == null)
+        {
+            <tr><td>Loading...</td></tr>
+        }
+
+        else
+        {
+            @foreach (TrainCar trainCar in Model)
+            {
+                <tr>
+                    <td>
+                        @trainCar.Weight
+                    </td>
+                    <td>
+                        @trainCar.TrainCarType
+                    </td>
+                    <td>
+                        @trainCar.Location.Name
+                    </td>
+                    <td>
+                        @if (trainCar.TrainComposition != null)
+                        {
+                            @trainCar.TrainComposition.Name
+                        }
+                        else
+                        {
+                            <span>Train composition not available</span>
+                        }
+                    </td>
+                    <td>
+                        <a href="traincars/edit/@trainCar.Id">Edit</a> |
+                        <a href="traincars/details/@trainCar.Id">Details</a> |
+                        <a href="traincars/delete/@trainCar.Id">Delete</a> |
+                        <a href="traincars" @onclick="(() => OnFastDelete(trainCar.Id))">Fast Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+
+@code
+{
+    IEnumerable<TrainCar> Model;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await trainCarManager.ReadAllAsync(true, false);
+    }
+
+    async Task OnFastDelete(int id)
+    {
+        try
+        {
+            await trainCarManager.DeleteAsync(id);
+
+            Model = await trainCarManager.ReadAllAsync(true, false);
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+}
+

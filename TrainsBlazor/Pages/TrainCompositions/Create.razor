@@ -1,0 +1,93 @@
+﻿@page "/compositions/create"
+@using BusinessLayer;
+@using ServiceLayer;
+@inject GenericManager<TrainComposition, int> compositionManager;
+@inject GenericManager<Location, int> locationManager;
+@inject NavigationManager navigationManager;
+
+<h3>Create</h3>
+
+
+<h4>Train Composition</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="Model" OnValidSubmit="OnCreated">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label class="control-label">Name</label>
+                <input @bind-value="Model.Name" class="form-control" />
+                <ValidationMessage For="@( () => Model.Name )" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Train Type</label>
+                <InputSelect @bind-Value="Model.TrainType" class="form-control">
+                    @if (Model.TrainType == null)
+                    {
+                        <option selected value="">None</option>
+                    }
+                    @foreach (var tt in Enum.GetValues(typeof(TrainType)))
+                    {
+                        <option value="@tt">@tt</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@( () => Model.TrainType)" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Location</label>
+                <InputSelect @bind-Value="Model.LocationId" class="form-control">
+                    @if (Model.LocationId == 0)
+                    {
+                        <option selected value="">None</option>
+                    }
+                    @foreach (var item in Locations)
+                    {
+                        <option value="@item.Id"> @item.Name </option>
+                    }
+                </InputSelect>
+                <span id="locationErrorLbl" class="text-danger">@locationError</span>
+            </div>
+
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="compositions">Back to List</a>
+</div>
+
+@code
+{
+    TrainComposition Model = new();
+    ICollection<Location> Locations = new List<Location>();
+    string locationError;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Locations = await locationManager.ReadAllAsync();
+        Model.Location = new Location();
+    }
+
+    private async Task OnCreated()
+    {
+        if (Model.LocationId == 0)
+        {
+            locationError = "You must choose a location";
+            return;
+        }
+        else
+        {
+            locationError = string.Empty;
+        }
+
+        Model.Location = new Location() { Id = Model.LocationId };
+
+        await compositionManager.CreateAsync(Model);
+        navigationManager.NavigateTo("compositions", true);
+    }
+
+}
