@@ -1,0 +1,86 @@
+﻿@page "/connections"
+@using ServiceLayer;
+@using BusinessLayer;
+@inject GenericManager<Connection, int> connectionManager
+@inject NavigationManager navigationManager;
+
+<h3>Index</h3>
+
+<p>
+    <a href="connections/create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Terrain type
+            </th>
+            <th>
+                Node A
+            </th>
+            <th>
+                Node B
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model == null)
+        {
+            <tr><td>Loading...</td></tr>
+        }
+
+        else
+        {
+            @foreach (Connection connection in Model)
+            {
+                <tr>
+                    <td>
+                        @connection.TerrainType
+                    </td>
+                    <td>
+                        @connection.NodeA.Name
+                    </td>
+                    <td>
+                        @connection.NodeB.Name
+                    </td>
+                    <td>
+                        <a href="connections/edit/@connection.Id">Edit</a> |
+                        <a href="connections/details/@connection.Id">Details</a> |
+                        <a href="connections/delete/@connection.Id">Delete</a> |
+                        <a href="connections" @onclick="(() => OnFastDelete(connection.Id))">Fast Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+
+    </tbody>
+</table>
+
+
+@code
+{
+    IEnumerable<Connection> Model;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await connectionManager.ReadAllAsync(true, false);
+        await base.OnInitializedAsync();
+    }
+
+    async Task OnFastDelete(int id)
+    {
+        try
+        {
+            await connectionManager.DeleteAsync(id);
+
+            Model = await connectionManager.ReadAllAsync(true);
+        }
+        catch (Exception)
+        {
+
+            throw;
+        }
+    }
+}
+

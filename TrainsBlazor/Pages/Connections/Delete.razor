@@ -1,0 +1,57 @@
+﻿@page "/connections/delete/{Id:int}"
+@using BusinessLayer;
+@using ServiceLayer;
+@inject GenericManager<Connection, int> connectionManager;
+@inject NavigationManager navigationManager;
+
+<h3>Delete</h3>
+
+<h4>Connection</h4>
+<hr />
+
+<div class="row">
+	<div class="col-md-4">
+		<EditForm Model="@Model" OnValidSubmit="OnDeleted">
+			<DataAnnotationsValidator />
+			<ValidationSummary />
+			<div class="form-group">
+				<label class="control-label"></label>
+				<span class="form-control">@Model.Id</span>
+				<ValidationMessage For=@( () => Model.Id) />
+			</div>
+			<br />
+			<div class="form-group">
+				<input type="submit" value="Delete" class="btn btn-primary" />
+			</div>
+
+		</EditForm>
+	</div>
+</div>
+
+<div>
+	<a href="connections">Back to List</a>
+</div>
+@code {
+	Connection Model = new();
+
+	[Parameter]
+	public int Id { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		Model = await connectionManager.ReadAsync(Id, true, false);
+	}
+
+	async Task OnDeleted()
+	{
+		try
+		{
+			await connectionManager.DeleteAsync(Model.Id);
+			navigationManager.NavigateTo("connections");
+		}
+		catch (Exception ex)
+		{
+			throw ex;
+		}
+	}
+}

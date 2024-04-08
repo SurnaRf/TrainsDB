@@ -1,0 +1,77 @@
+﻿@page "/compositions/edit/{Id:int}"
+@using BusinessLayer;
+@using ServiceLayer;
+@inject GenericManager<TrainComposition, int> trainCompositionManager;
+@inject GenericManager<Location, int> locationManager;
+@inject NavigationManager navigationManager;
+
+<h3>Edit</h3>
+
+
+<h4>Train Composition</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="Model" OnValidSubmit="OnUpdated">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label class="control-label">Name</label>
+                <input @bind-value="Model.Name" class="form-control" />
+                <ValidationMessage For="@( () => Model.Name )" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Train Type</label>
+                <input @bind-value="Model.TrainType" class="form-control" />
+                <ValidationMessage For="@( () => Model.TrainType)" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Location</label>
+                <InputSelect @bind-Value="Model.LocationId" class="form-control">
+
+                    @foreach (var item in Locations)
+                    {
+                        if (item.Id == Model.LocationId)
+                        {
+                            <option selected value="@item.Id"> @item.Name </option>
+                        }
+                        else
+                        {
+                            <option value="@item.Id"> @item.Name </option>
+                        }
+                    }
+                </InputSelect>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="compositions">Back to List</a>
+</div>
+
+@code
+{
+    TrainComposition Model = new();
+    ICollection<Location> Locations = new List<Location>();
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Locations = await locationManager.ReadAllAsync();
+
+        Model = await trainCompositionManager.ReadAsync(Id, true, false);
+    }
+
+    private async Task OnUpdated()
+    {
+        await trainCompositionManager.UpdateAsync(Model, true);
+        navigationManager.NavigateTo("compositions");
+    }
+
+}

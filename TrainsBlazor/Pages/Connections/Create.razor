@@ -1,0 +1,118 @@
+﻿@page "/connections/create"
+@using BusinessLayer;
+@using ServiceLayer;
+@using BusinessLayer.Terrain;
+@inject GenericManager<Connection, int> connectionManager;
+@inject GenericManager<Location, int> locationAManager;
+@inject GenericManager<Location, int> locationBManager
+@inject NavigationManager navigationManager;
+
+<h3>Create</h3>
+
+
+<h4>Connection</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="Model" OnValidSubmit="OnCreated">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label class="control-label">Terrain Type</label>
+                <InputSelect @bind-Value="Model.TerrainType" class="form-control">
+                    @if (Model.TerrainType == null)
+                    {
+                        <option selected value="">None</option>
+                    }
+                    @foreach (var c in Enum.GetValues(typeof(TerrainType)))
+                    {
+                        <option value="@c">@c</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@( () => Model.TerrainType)" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Location A</label>
+                <InputSelect @bind-Value="Model.NodeAId" class="form-control">
+                    @if (Model.NodeAId == 0)
+                    {
+                        <option selected value="">None</option>
+                    }
+                    @foreach (var item in NodeAs)
+                    {
+                        <option value="@item.Id"> @item.Name </option>
+                    }
+                </InputSelect>
+                <span id="locationAErrorLbl" class="text-danger">@nodeAError</span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Location B</label>
+                <InputSelect @bind-Value="Model.NodeBId" class="form-control">
+                    @if (Model.NodeBId == 0)
+                    {
+                        <option selected value="">None</option>
+                    }
+                    @foreach (var item in NodeBs)
+                    {
+                        <option value="@item.Id"> @item.Name </option>
+                    }
+                </InputSelect>
+                <span id="locationBErrorLbl" class="text-danger">@nodeBError</span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="connections">Back to List</a>
+</div>
+
+@code
+{
+    Connection Model = new();
+    ICollection<Location> NodeAs = new List<Location>();
+    ICollection<Location> NodeBs = new List<Location>();
+    string nodeBError;
+    string nodeAError;
+
+    protected override async Task OnInitializedAsync()
+    {
+        NodeAs = await locationAManager.ReadAllAsync();
+        NodeBs = await locationBManager.ReadAllAsync();
+
+        Model.NodeA = new();
+        Model.NodeB = new();
+    }
+
+    private async Task OnCreated()
+    {
+        if (Model.NodeAId == 0)
+        {
+            nodeAError = "You must choose a starting location";
+            return;
+        }
+        else
+        {
+            nodeAError = string.Empty;
+        }
+        if (Model.NodeBId == 0)
+        {
+            nodeBError = "You must choose an ending location";
+            return;
+        }
+        else
+        {
+            nodeBError = string.Empty;
+        }
+
+        Model.NodeA = new() { Id = Model.NodeAId };
+        Model.NodeB= new() { Id = (int)Model.NodeBId };
+
+        await connectionManager.CreateAsync(Model);
+        navigationManager.NavigateTo("connections", true);
+    }
+
+}

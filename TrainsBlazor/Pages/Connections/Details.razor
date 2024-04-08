@@ -1,0 +1,63 @@
+﻿@page "/connections/details/{Id:int}"
+@using BusinessLayer;
+@using ServiceLayer;
+@inject GenericManager<Connection, int> connectionManager
+
+<h3>Details</h3>
+
+<div>
+    <h4>Connection</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Terrain Type
+        </dt>
+        <dd class="col-sm-10">
+            @Model.TerrainType
+        </dd>
+        <dt class="col-sm-2">
+            Location A
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.NodeA != null)
+            {
+                @Model.NodeA.Name
+            }
+            else
+            {
+                <span>Location A not available</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            Location B
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.NodeB != null)
+            {
+                @Model.NodeB.Name
+            }
+            else
+            {
+                <span>Location B not available</span>
+            }
+        </dd>        
+    </dl>
+</div>
+<div>
+    <a href="connections/edit/@Model.Id">Edit</a> |
+    <a href="connections">Back to List</a>
+</div>
+
+@code
+{
+    [Parameter]
+    public int Id { get; set; }
+
+    Connection Model = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await connectionManager.ReadAsync(Id, true);
+    }
+
+}

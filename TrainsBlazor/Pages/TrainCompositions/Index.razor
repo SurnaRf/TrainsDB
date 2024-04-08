@@ -1,0 +1,83 @@
+﻿@page "/compositions"
+@using BusinessLayer;
+@using ServiceLayer;
+@inject GenericManager<TrainComposition, int> compositionManager;
+@inject NavigationManager navigationManager;
+
+<h3>Index</h3>
+
+<p>
+    <a href="compositions/create">Create New</a>
+</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Train Type
+            </th>
+            <th>
+                Location
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model is null)
+        {
+            <tr>Loading ...</tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.TrainType
+                    </td>
+
+                    <td>
+                        @item.Location.Name
+                    </td>
+                    <td>
+                        <a href="compositions/edit/@item.Id">Edit</a> |
+                        <a href="compositions/details/@item.Id">Details</a> |
+                        <a href="compositions/delete/@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+@code
+{
+    ICollection<TrainComposition> Model;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await compositionManager.ReadAllAsync(true, false);
+    }
+
+    async Task OnDelete(int id)
+    {
+        try
+        {
+            await compositionManager.DeleteAsync(id);
+            Model = await compositionManager.ReadAllAsync(true, false);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+}

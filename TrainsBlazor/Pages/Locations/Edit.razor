@@ -1,0 +1,68 @@
+﻿@page "/locations/edit/{Id}"
+@using BusinessLayer;
+@using ServiceLayer;
+@inject GenericManager<Location, int> locationManager;
+@inject NavigationManager navigationManager;
+
+<h3>Edit</h3>
+
+
+<h4>Location</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="Model" OnValidSubmit="OnUpdated">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label class="control-label">Id</label>
+                <label class="form-control">@Model.Id</label>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Name</label>
+                <input @bind-value="Model.Name" class="form-control" />
+                <ValidationMessage For="@( () => Model.Name )" />
+            </div>
+            <div class="form-group">
+                <label for="X" class="control-label">X:</label>
+                <input id="X" class="form-control" @bind="@Model.Coordinates.X" />
+            </div>
+            <div class="form-group">
+                <label for="Y" class="control-label">Y:</label>
+                <input id="Y" class="form-control" @bind="@Model.Coordinates.Y" />
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="locations">Back to List</a>
+</div>
+
+@code
+{
+    Location Model = new();
+
+    [Parameter]
+    public int Id { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await locationManager.ReadAsync(Id, true, false);
+    }
+
+    private async Task OnUpdated()
+    {
+        await locationManager.UpdateAsync(Model, true);
+        navigationManager.NavigateTo("locations");
+    }
+
+}
+<h3>Edit</h3>
+
+@code {
+
+}

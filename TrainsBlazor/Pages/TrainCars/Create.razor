@@ -1,0 +1,110 @@
+﻿@page "/traincars/create"
+@using BusinessLayer;
+@using ServiceLayer;
+@inject GenericManager<TrainCar, int> trainCarManager;
+@inject GenericManager<Location, int> locationManager;
+@inject GenericManager<TrainComposition, int> trainCompositionManager;
+@inject NavigationManager navigationManager;
+
+<h3>Create</h3>
+
+
+<h4>Train car</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="Model" OnValidSubmit="OnCreated">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label class="control-label">Train car Type</label>
+                <InputSelect @bind-Value="Model.TrainCarType" class="form-control">
+                    @if (Model.TrainCarType == null)
+                    {
+                        <option selected value="">None</option>
+                    }
+                    @foreach (var tct in Enum.GetValues(typeof(TrainCarType)))
+                    {
+                        <option value="@tct">@tct</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@( () => Model.TrainCarType)" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Weight</label>
+                <input @bind-value="Model.Weight" class="form-control" />
+                <ValidationMessage For="@( () => Model.Weight)" />
+            </div>
+            <div class="form-group">
+                <label class="control-label">Location</label>
+                <InputSelect @bind-Value="Model.LocationId" class="form-control">
+                    @if (Model.LocationId == 0)
+                    {
+                        <option selected value="">None</option>
+                    }
+                    @foreach (var item in Locations)
+                    {
+                        <option value="@item.Id"> @item.Name </option>
+                    }
+                </InputSelect>
+                <span id="locationErrorLbl" class="text-danger">@locationError</span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Train composition</label>
+                <InputSelect @bind-Value="Model.TrainCompositionId" class="form-control">
+                    @if (Model.TrainCompositionId == 0)
+                    {
+                        <option selected value="">None</option>
+                    }
+                    @foreach (var item in Compositions)
+                    {
+                        <option value="@item.Id"> @item.Name </option>
+                    }
+                </InputSelect>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+<div>
+    <a href="traincars">Back to List</a>
+</div>
+
+@code
+{
+    TrainCar Model = new();
+    ICollection<Location> Locations = new List<Location>();
+    ICollection<TrainComposition> Compositions = new List<TrainComposition>();
+    string locationError;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Locations = await locationManager.ReadAllAsync();
+        Compositions = await trainCompositionManager.ReadAllAsync();
+
+        Model.Location = new();
+        Model.TrainComposition = new();
+    }
+
+    private async Task OnCreated()
+    {
+        if (Model.LocationId == 0)
+        {
+            locationError = "You must choose a location";
+            return;
+        }
+        else
+        {
+            locationError = string.Empty;
+        }    
+
+        Model.Location = new() { Id = Model.LocationId };
+
+        await trainCarManager.CreateAsync(Model);
+        navigationManager.NavigateTo("traincars", true);
+    }
+
+}

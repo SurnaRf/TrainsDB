@@ -1,0 +1,76 @@
+﻿@page "/locations"
+@using BusinessLayer;
+@using ServiceLayer;
+@inject GenericManager<Location, int> locationManager;
+@inject NavigationManager navigationManager;
+
+<h3>Index</h3>
+
+<p>
+    <a href="locations/create">Create New</a>
+</p>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Name
+            </th>
+            <th>
+                Coordinates
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model is null)
+        {
+            <tr>Loading ...</tr>
+        }
+        else
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.Name
+                    </td>
+                    <td>
+                        @item.Coordinates
+                    </td>
+                    <td>
+                        <a href="locations/edit/@item.Id">Edit</a> |
+                        <a href="locations/details/@item.Id">Details</a> |
+                        <a href="locations/delete/@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>
+
+
+@code
+{
+    ICollection<Location> Model;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await locationManager.ReadAllAsync(true, false);
+    }
+
+    async Task OnDelete(int id)
+    {
+        try
+        {
+            await locationManager.DeleteAsync(id);
+            Model = await locationManager.ReadAllAsync(true, false);
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+}

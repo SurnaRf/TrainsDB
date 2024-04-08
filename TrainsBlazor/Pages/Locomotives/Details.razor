@@ -1,0 +1,75 @@
+﻿@page "/locomotives/details/{Id:int}"
+@using BusinessLayer;
+@using ServiceLayer;
+@inject GenericManager<Locomotive, int> locomotiveManager
+
+<h3>Details</h3>
+
+<div>
+    <h4>Locomotive</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            Nickname
+        </dt>
+        <dd class="col-sm-10">
+            @Model.Nickname
+        </dd>
+        <dt class="col-sm-2">
+            Locomotive Type
+        </dt>
+        <dd class="col-sm-10">
+            @Model.LocomotiveType
+        </dd>
+        <dt class="col-sm-2">
+            Carrying capacity
+        </dt>
+        <dd class="col-sm-10">
+            @Model.CarryingCapacity
+        </dd>       
+        <dt class="col-sm-2">
+            Location
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.Location != null)
+            {
+                @Model.Location.Name
+            }
+            else
+            {
+                <span>Location not available</span>
+            }
+        </dd>
+        <dt class="col-sm-2">
+            Train composition
+        </dt>
+        <dd class="col-sm-10">
+            @if (Model.TrainComposition != null)
+            {
+                @Model.TrainComposition.Name
+            }
+            else
+            {
+                <span>Train composition not available</span>
+            }
+        </dd>
+    </dl>
+</div>
+<div>
+    <a href="locomotives/edit/@Model.Id">Edit</a> |
+    <a href="locomotives">Back to List</a>
+</div>
+
+@code
+{
+    [Parameter]
+    public int Id { get; set; }
+
+    Locomotive Model = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Model = await locomotiveManager.ReadAsync(Id, true);
+    }
+
+}
