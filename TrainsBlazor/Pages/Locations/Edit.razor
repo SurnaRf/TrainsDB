@@ -1,4 +1,4 @@
-﻿@page "/locations/edit/{Id}"
+﻿@page "/locations/edit/{Id:int}"
 @using BusinessLayer;
 @using ServiceLayer;
 @inject GenericManager<Location, int> locationManager;
@@ -13,10 +13,6 @@
     <div class="col-md-4">
         <EditForm Model="Model" OnValidSubmit="OnUpdated">
             <DataAnnotationsValidator />
-            <div class="form-group">
-                <label class="control-label">Id</label>
-                <label class="form-control">@Model.Id</label>
-            </div>
             <div class="form-group">
                 <label class="control-label">Name</label>
                 <input @bind-value="Model.Name" class="form-control" />

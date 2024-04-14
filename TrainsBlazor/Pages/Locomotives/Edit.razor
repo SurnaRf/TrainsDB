@@ -23,8 +23,17 @@
             </div>
             <div class="form-group">
                 <label class="control-label">Locomotive Type</label>
-                <input @bind-value="Model.LocomotiveType" class="form-control" />
-                <ValidationMessage For="@( () => Model.LocomotiveType )" />
+                <InputSelect @bind-Value="Model.LocomotiveType" class="form-control">
+                    @if (Model.LocomotiveType == null)
+                    {
+                        <option selected value="">None</option>
+                    }
+                    @foreach (var lt in Enum.GetValues(typeof(LocomotiveType)))
+                    {
+                        <option value="@lt">@lt</option>
+                    }
+                </InputSelect>
+                <ValidationMessage For="@( () => Model.LocomotiveType)" />
             </div>
             <div class="form-group">
                 <label class="control-label">Carrying capacity</label>
