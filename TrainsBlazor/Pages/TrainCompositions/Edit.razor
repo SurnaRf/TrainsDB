@@ -3,6 +3,8 @@
 @using ServiceLayer;
 @inject GenericManager<TrainComposition, int> trainCompositionManager;
 @inject GenericManager<Location, int> locationManager;
+@inject GenericManager<Locomotive, int> locomotiveManager;
+@inject GenericManager<TrainCar, int> trainCarManager;
 @inject NavigationManager navigationManager;
 
 <h3>Edit</h3>
@@ -70,8 +72,9 @@
 
     private async Task OnUpdated()
     {
-        await trainCompositionManager.UpdateAsync(Model, true);
+        Location newLocation = await locationManager.ReadAsync(Model.LocationId);
+        await LogicUtility.UpdateLocationOfComposition(trainCompositionManager, locomotiveManager, trainCarManager, Model, newLocation);
+        // await trainCompositionManager.UpdateAsync(Model, true);
         navigationManager.NavigateTo("compositions");
     }
-
 }

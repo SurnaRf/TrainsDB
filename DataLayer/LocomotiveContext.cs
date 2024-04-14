@@ -28,12 +28,16 @@ namespace DataLayer
 					item.Location = locationFromDb;
 				}
 
-                TrainComposition trainCompositionFromDb = await dbContext.TrainCompositions.FindAsync(item.TrainCompositionId);
+				if(item.TrainCompositionId != null)
+				{
+					TrainComposition trainCompositionFromDb = await dbContext.TrainCompositions.FindAsync(item.TrainCompositionId);
 
-                if (trainCompositionFromDb != null)
-                {
-                    item.TrainComposition = trainCompositionFromDb;
-                }
+					if (trainCompositionFromDb != null)
+					{
+						item.TrainComposition = trainCompositionFromDb;
+					}
+				}
+                else item.TrainComposition = null;
 
                 dbContext.Locomotives.Add(item);
 				await dbContext.SaveChangesAsync();

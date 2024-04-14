@@ -51,10 +51,7 @@
             <div class="form-group">
                 <label class="control-label">Train composition</label>
                 <InputSelect @bind-Value="Model.TrainCompositionId" class="form-control">
-                    @if (Model.TrainCompositionId == 0)
-                    {
-                        <option selected value="">None</option>
-                    }
+                    <option selected value="">None</option>
                     @foreach (var item in Compositions)
                     {
                         <option value="@item.Id"> @item.Name </option>
@@ -78,7 +75,7 @@
     TrainCar Model = new();
     ICollection<Location> Locations = new List<Location>();
     ICollection<TrainComposition> Compositions = new List<TrainComposition>();
-    string locationError;
+    string locationError = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {

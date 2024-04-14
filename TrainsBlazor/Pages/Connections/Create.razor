@@ -75,8 +75,8 @@
     Connection Model = new();
     ICollection<Location> NodeAs = new List<Location>();
     ICollection<Location> NodeBs = new List<Location>();
-    string nodeBError;
-    string nodeAError;
+    string nodeBError = string.Empty;
+    string nodeAError = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {

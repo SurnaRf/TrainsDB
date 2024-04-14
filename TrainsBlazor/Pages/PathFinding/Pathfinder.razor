@@ -1,0 +1,129 @@
+@page "/pathfinding"
+@using BusinessLayer;
+@using ServiceLayer;
+@using Pathfinding;
+@inject GenericManager<Location, int> locationManager;
+@inject GenericManager<Connection, int> connectionManager;
+
+<h3>Pathfinding</h3>
+
+<div class="row">
+    <div class="col-md-4">
+        <EditForm Model="Model" OnValidSubmit="Calculate">
+            <DataAnnotationsValidator />
+            <div class="form-group">
+                <label class="control-label">From</label>
+                <InputSelect @bind-Value="Model.FromId" class="form-control">
+                    @if (Model.FromId == 0)
+                    {
+                        <option selected value="">None</option>
+                    }
+                    @foreach (var item in Locations)
+                    {
+                        <option value="@item.Id"> @item.Name </option>
+                    }
+                </InputSelect>
+                <span id="locationErrorLbl" class="text-danger">@fromError</span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">To</label>
+                <InputSelect @bind-Value="Model.ToId" class="form-control">
+                    @if (Model.ToId == 0)
+                    {
+                        <option selected value="">None</option>
+                    }
+                    @foreach (var item in Locations)
+                    {
+                        <option value="@item.Id"> @item.Name </option>
+                    }
+                </InputSelect>
+                <span id="locationErrorLbl" class="text-danger">@toError</span>
+            </div>
+            <br />
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+<br/>
+
+@if (Model != null && path != null)
+{
+    <div class="row">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th> From </th>
+                    <th> To </th>
+                    <th> Weight </th>
+                </tr>
+            </thead>
+            <tbody>
+                @{
+                    Location previous = Model.From!;
+                    foreach (var item in path)
+                    {
+                        <tr>
+                            <td> @(previous.Name) </td>
+                            <td> @(item.Other(previous).Name) </td>
+                            <td> @(item.Weight) </td>
+                        </tr>
+                        previous = item.Other(previous);
+                    }
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+
+@code
+{
+    class Query
+    {
+        public Location? From { get; set; }
+        public int FromId { get; set; }
+        public Location? To { get; set; }
+        public int ToId { get; set; }
+    }
+
+    Query Model = new();
+    ICollection<Location> Locations = new List<Location>();
+    ICollection<Connection> Connections = new List<Connection>();
+    Paths<Location>? paths;
+    List<IEdge<Location>>? path;
+
+    string fromError = string.Empty;
+    string toError = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Locations = await locationManager.ReadAllAsync();
+        Connections = await connectionManager.ReadAllAsync();
+    }
+
+    private async Task Calculate()
+    {
+        if (Model.FromId == 0)
+        {
+            fromError = "Missing starting location!";
+            return;
+        }
+        else fromError = string.Empty;
+
+        if (Model.ToId == 0)
+        {
+            toError = "Missing ending location!";
+            return;
+        }
+        else toError = string.Empty;
+
+        Model.From = await locationManager.ReadAsync(Model.FromId);
+        Model.To = await locationManager.ReadAsync(Model.ToId);
+
+        paths = await PathfindingUtility.GetPaths(Model.From, connectionManager);
+        path = paths.ReconstructPathEdges(Model.To);
+    }
+}

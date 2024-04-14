@@ -56,10 +56,7 @@
             <div class="form-group">
                 <label class="control-label">Train composition</label>
                 <InputSelect @bind-Value="Model.TrainCompositionId" class="form-control">
-                    @if (Model.TrainCompositionId == 0)
-                    {
-                        <option selected value="">None</option>
-                    }
+                    <option selected value="">None</option>
                     @foreach (var item in Compositions)
                     {
                         <option value="@item.Id"> @item.Name </option>
@@ -84,8 +81,8 @@
     Locomotive Model = new();
     ICollection<Location> Locations = new List<Location>();
     ICollection<TrainComposition> Compositions = new List<TrainComposition>();
-    string locationError;
-    string compositionError;
+    string locationError = string.Empty;
+    string compositionError = string.Empty;
 
     protected override async Task OnInitializedAsync()
     {
@@ -118,7 +115,7 @@
         }
 
         Model.Location = new() { Id = Model.LocationId };
-        Model.TrainComposition = new() { Id = (int)Model.TrainCompositionId };
+        if(Model.TrainCompositionId != null) Model.TrainComposition = new() { Id = (int)Model.TrainCompositionId };
 
         await locomotiveManager.CreateAsync(Model);
         navigationManager.NavigateTo("locomotives", true);

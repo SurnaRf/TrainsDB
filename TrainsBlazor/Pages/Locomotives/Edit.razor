@@ -51,6 +51,7 @@
             <div class="form-group">
                 <label class="control-label">Train composition</label>
                 <InputSelect @bind-Value="Model.TrainCompositionId" class="form-control">
+                    <option selected value=""> None </option>
                     @foreach (var item in Compositions)
                     {
                         if (item.Id == Model.TrainCompositionId)
