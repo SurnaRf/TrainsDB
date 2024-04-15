@@ -36,6 +36,7 @@ namespace BusinessLayer
             TrainCompositions = new();
             Locomotives = new();
             TrainCars = new();
+            Coordinates = new();
         }
 
         public Location(string name, Coordinates coordinates)

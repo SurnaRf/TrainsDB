@@ -25,6 +25,12 @@ namespace ServiceLayer
             TrainComposition trainComposition,
             Location newLocation)
         {
+            if (trainComposition.LocationId == newLocation.Id)
+            {
+                await compositionContext.UpdateAsync(trainComposition);
+                return;
+            }
+
             trainComposition = await compositionContext.ReadAsync(trainComposition.Id, true);
 
             bool isOnThatLocation = trainComposition.Location == newLocation;
